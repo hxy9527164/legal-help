@@ -21,15 +21,16 @@ for jf, jsf, vn in [
         f.write(f'window.{vn} = ' + json.dumps(data, ensure_ascii=False, indent=2) + ';\n')
     print(f'  ✅ {jsf}')
 
-# 2. 更新版本号
+# 2. 更新版本号 (index.html redirect + app.html)
 import re
 version = time.strftime('%Y%m%d%H%M')
-with open(BASE / 'index.html', 'r', encoding='utf-8') as f:
-    html = f.read()
-html = re.sub(r'\?v=\d+', f'?v={version}', html)
-html = re.sub(r'var v="\d+"', f'var v="{version}"', html)
-with open(BASE / 'index.html', 'w', encoding='utf-8') as f:
-    f.write(html)
+for fname in ['index.html', 'app.html']:
+    with open(BASE / fname, 'r', encoding='utf-8') as f:
+        html = f.read()
+    html = re.sub(r'\?v=\d+', f'?v={version}', html)
+    html = re.sub(r'var v="\d+"', f'var v="{version}"', html)
+    with open(BASE / fname, 'w', encoding='utf-8') as f:
+        f.write(html)
 print(f'  OK 版本号: {version}')
 
 # 3. Git 推送

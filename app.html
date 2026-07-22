@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var v="202607222112";if(location.search.indexOf(v)===-1&&location.hostname){location.search="?v="+v}})()</script>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>法律自助助手 - 遇到问题，三步找到解决方案</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- 顶部导航栏 -->
+    <!-- ============================================================ -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#home" class="nav-logo">⚖️ 法律自助助手</a>
+            <nav class="nav-links">
+                <a href="#home" class="active">首页</a>
+                <a href="#wizard-section">问题诊断</a>
+                <a href="#lawyer-section">查找律师</a>
+                <a href="#template-section">文书模板</a>
+                <a href="#procedure-section">诉讼指南</a>
+                <a href="#calculator-section">费用计算</a>
+                <a href="#faq-section">常见问题</a>
+            </nav>
+            <button class="hamburger" id="hamburger" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- 首页 Hero -->
+    <!-- ============================================================ -->
+    <section class="hero section active" id="home">
+        <div class="container hero-content">
+            <span class="hero-badge">⚖️ 非法律从业者专用</span>
+            <h1 class="hero-title-main">遇到法律问题？<br><span class="gradient-text">三步找到解决方案</span></h1>
+            <p class="hero-subtitle">
+                不用懂法律条文，跟着步骤走就行。覆盖消费纠纷、劳动雇佣、住房邻里、婚姻家庭四大领域。
+            </p>
+            <!-- 三大入口卡片 -->
+            <div class="entry-cards">
+                <div class="entry-card" data-target="wizard-section">
+                    <div class="entry-icon">🧭</div>
+                    <h3>问题诊断</h3>
+                    <p>选择你的问题类型，回答几个关键问题，自动生成应对方案</p>
+                    <span class="entry-arrow">开始诊断 →</span>
+                </div>
+                <div class="entry-card" data-target="lawyer-section">
+                    <div class="entry-icon">⚖️</div>
+                    <h3>查找律师</h3>
+                    <p>按地区和专业领域搜索全国律师，查看他们的擅长方向和案例</p>
+                    <span class="entry-arrow">查找律师 →</span>
+                </div>
+                <div class="entry-card" data-target="template-section">
+                    <div class="entry-icon">📋</div>
+                    <h3>文书模板</h3>
+                    <p>起诉状、投诉函、仲裁申请……常用法律文书模板，一键复制使用</p>
+                    <span class="entry-arrow">查看模板 →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 问题诊断向导（核心功能区） -->
+    <!-- ============================================================ -->
+    <section class="wizard-section section" id="wizard-section">
+        <div class="container">
+            <button class="back-home" onclick="document.querySelector('.nav-logo').click()">← 返回首页</button>
+            <h2 class="section-title">🧭 问题诊断向导</h2>
+            <p class="section-subtitle">选择你的问题类型，一步步找到解决方案</p>
+
+            <!-- 步骤指示器 -->
+            <div class="wizard-steps" id="wizard-steps">
+                <div class="w-step active" data-step="1">
+                    <span class="step-num">1</span>
+                    <span class="step-label">选择领域</span>
+                </div>
+                <div class="w-step" data-step="2">
+                    <span class="step-num">2</span>
+                    <span class="step-label">具体场景</span>
+                </div>
+                <div class="w-step" data-step="3">
+                    <span class="step-num">3</span>
+                    <span class="step-label">关键信息</span>
+                </div>
+                <div class="w-step" data-step="4">
+                    <span class="step-num">4</span>
+                    <span class="step-label">应对方案</span>
+                </div>
+            </div>
+
+            <!-- 向导内容区 -->
+            <div class="wizard-container" id="wizard-container">
+                <!-- Step 1: 选择领域（初始可见） -->
+                <div class="wizard-panel active" id="panel-step1">
+                    <h3 class="wizard-question">你遇到了哪方面的问题？</h3>
+                    <div class="category-grid" id="category-grid">
+                        <!-- JS动态生成 -->
+                    </div>
+                </div>
+
+                <!-- Step 2: 选择场景 -->
+                <div class="wizard-panel" id="panel-step2">
+                    <button class="wizard-back" id="back-to-step1">← 返回重新选择</button>
+                    <h3 class="wizard-question" id="step2-title">具体是什么情况？</h3>
+                    <div class="scenario-grid" id="scenario-grid">
+                        <!-- JS动态生成 -->
+                    </div>
+                </div>
+
+                <!-- Step 3: 关键问题 -->
+                <div class="wizard-panel" id="panel-step3">
+                    <button class="wizard-back" id="back-to-step2">← 返回上一步</button>
+                    <h3 class="wizard-question">请确认以下关键信息</h3>
+                    <div class="questions-form" id="questions-form">
+                        <!-- JS动态生成 -->
+                    </div>
+                    <button class="btn btn-primary btn-large" id="generate-plan">生成应对方案</button>
+                </div>
+
+                <!-- Step 4: 应对方案 -->
+                <div class="wizard-panel" id="panel-step4">
+                    <button class="wizard-back" id="back-to-step1-bottom">← 重新诊断</button>
+                    <div class="plan-result" id="plan-result">
+                        <!-- JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 律师查找 -->
+    <!-- ============================================================ -->
+    <section class="lawyer-section section" id="lawyer-section">
+        <div class="container">
+            <button class="back-home" onclick="document.querySelector('.nav-logo').click()">← 返回首页</button>
+            <h2 class="section-title">⚖️ 查找律师</h2>
+            <p class="section-subtitle">按地区和专业领域筛选，找到适合你案件的律师</p>
+
+            <!-- 搜索和筛选 -->
+            <div class="lawyer-search-bar">
+                <input type="text" class="search-input" id="lawyer-search" placeholder="搜索律师姓名、律所或擅长领域...">
+                <button class="btn btn-primary" id="btn-add-lawyer" style="white-space:nowrap;padding:12px 18px;">+ 添加律师</button>
+            </div>
+            <div class="lawyer-filter-row">
+                <select class="search-select" id="filter-province">
+                    <option value="">全部省份</option>
+                </select>
+                <select class="search-select" id="filter-city">
+                    <option value="">全部城市</option>
+                </select>
+                <select class="search-select" id="filter-district">
+                    <option value="">全部区县</option>
+                </select>
+                <select class="search-select" id="filter-experience">
+                    <option value="">全部经验</option>
+                    <option value="0-3">3年以下</option>
+                    <option value="4-7">4-7年</option>
+                    <option value="8-15">8-15年</option>
+                    <option value="16-99">16年以上</option>
+                </select>
+                <select class="search-select" id="filter-firm">
+                    <option value="">全部律所</option>
+                </select>
+                <select class="search-select" id="filter-field">
+                    <option value="">全部领域</option>
+                </select>
+                <select class="search-select" id="filter-sort">
+                    <option value="">默认排序</option>
+                    <option value="exp-desc">经验从高到低</option>
+                    <option value="exp-asc">经验从低到高</option>
+                </select>
+            </div>
+
+            <!-- 律师列表 -->
+            <div class="lawyer-count" id="lawyer-count" style="text-align:center;margin-bottom:20px;color:var(--text-secondary);font-size:0.85rem;"></div>
+            <div class="lawyer-grid" id="lawyer-grid">
+                <!-- JS动态渲染 -->
+            </div>
+            <div class="pagination" id="lawyer-pagination" style="display:none;">
+                <button class="page-btn" id="page-prev">← 上一页</button>
+                <span class="page-info" id="page-info"></span>
+                <button class="page-btn" id="page-next">下一页 →</button>
+            </div>
+            <div class="no-results" id="lawyer-no-results" style="display:none;">
+                <p>😕 没有找到匹配的律师，试试调整筛选条件</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 文书模板 -->
+    <!-- ============================================================ -->
+    <section class="template-section section" id="template-section">
+        <div class="container">
+            <h2 class="section-title">📋 法律文书模板</h2>
+            <p class="section-subtitle">常用法律文书模板，点击即可复制使用。请根据实际情况修改括号内容。</p>
+
+            <!-- 分类筛选 -->
+            <div class="filter-buttons" id="template-filters">
+                <!-- JS动态生成 -->
+            </div>
+
+            <!-- 模板列表 -->
+            <div class="template-list" id="template-list">
+                <!-- JS动态渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 常见问题 FAQ -->
+    <!-- ============================================================ -->
+    <section class="faq-section section" id="faq-section">
+        <div class="container">
+            <h2 class="section-title">💡 常见问题</h2>
+            <p class="section-subtitle">法律小白最常问的问题，用大白话给你讲清楚</p>
+
+            <div class="faq-list" id="faq-list">
+                <!-- JS动态渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 程序性知识（诉讼时效/证据/费用/法援） -->
+    <!-- ============================================================ -->
+    <section class="procedure-section section" id="procedure-section">
+        <div class="container">
+            <h2 class="section-title">📖 打官司前必读</h2>
+            <p class="section-subtitle">普通人最困惑的几个问题，一次讲清楚</p>
+
+            <div class="procedure-grid">
+                <!-- 诉讼时效 -->
+                <div class="procedure-card">
+                    <div class="proc-icon">⏰</div>
+                    <h4>诉讼时效：过期就输了</h4>
+                    <div class="proc-body">
+                        <p><strong>一般民事纠纷：3年</strong>（从你知道权利被侵害+知道是谁侵害你时算）</p>
+                        <p><strong>劳动仲裁：1年</strong>（从离职之日算起）</p>
+                        <p><strong>交通事故人身损害：3年</strong></p>
+                        <p><strong>保险理赔：3年</strong>（从被拒赔之日起）</p>
+                        <p class="proc-tip">💡 时效可以"中断"重新计算——每次催对方（有记录）、对方部分还款，时效重新开始算3年。</p>
+                    </div>
+                </div>
+
+                <!-- 证据指南 -->
+                <div class="procedure-card">
+                    <div class="proc-icon">📸</div>
+                    <h4>证据怎么收集和保存</h4>
+                    <div class="proc-body">
+                        <p><strong>电子证据：</strong>微信聊天记录、邮件、短信→截图+保留原始记录（不要删聊天记录）；录音→提前说明时间地点人物，不要剪辑</p>
+                        <p><strong>书面证据：</strong>合同、收据、借条→原件保留好</p>
+                        <p><strong>转账记录：</strong>银行流水、WX/ZFB转账记录→导出带公章的版本</p>
+                        <p class="proc-tip">💡 黄金原则：<strong>先固定证据，再采取行动</strong>。不要等到开始维权了才想起来没留证据。</p>
+                    </div>
+                </div>
+
+                <!-- 诉讼费用 -->
+                <div class="procedure-card">
+                    <div class="proc-icon">💵</div>
+                    <h4>打官司要花多少钱</h4>
+                    <div class="proc-body" id="cost-estimate">
+                        <p><strong>劳动仲裁：完全免费！</strong></p>
+                        <p><strong>小额诉讼（5万以下）：</strong>诉讼费50元起，一审终审</p>
+                        <p><strong>一般民事诉讼：</strong>按下表计算</p>
+                        <div class="cost-table">
+                            <div class="cost-row"><span>1万元以下</span><span>50元</span></div>
+                            <div class="cost-row"><span>1万-10万</span><span>标的额 × 2.5% - 200</span></div>
+                            <div class="cost-row"><span>10万-20万</span><span>标的额 × 2% + 300</span></div>
+                            <div class="cost-row"><span>20万-50万</span><span>标的额 × 1.5% + 1300</span></div>
+                        </div>
+                        <p class="proc-tip">💡 赢了官司的话，诉讼费一般由败诉方承担。经济困难可申请缓交/减交/免交。</p>
+                    </div>
+                </div>
+
+                <!-- 法律援助 -->
+                <div class="procedure-card">
+                    <div class="proc-icon">🆓</div>
+                    <h4>没钱请律师怎么办</h4>
+                    <div class="proc-body">
+                        <p><strong>法律援助（免费律师）：</strong>符合以下条件可以申请：</p>
+                        <p>① 经济困难（低保户/低收入家庭）</p>
+                        <p>② 涉及追索赡养费、抚养费、劳动报酬、工伤赔偿</p>
+                        <p>③ 刑事案件中的嫌疑人/被告人/被害人</p>
+                        <p><strong>怎么申请：</strong>去当地司法局法律援助中心，带身份证+困难证明+案件材料。</p>
+                        <p class="proc-tip">💡 拨打 <strong>12348</strong> 法律援助热线，免费法律咨询，7×24小时。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 诉讼费计算器 -->
+    <!-- ============================================================ -->
+    <section class="calculator-section section" id="calculator-section">
+        <div class="container">
+            <h2 class="section-title">🧮 诉讼费快速计算</h2>
+            <p class="section-subtitle">输入你要索赔的金额，一键算出诉讼费</p>
+
+            <div class="calculator-box">
+                <div class="calc-input-row">
+                    <span class="calc-label">我要索赔：</span>
+                    <input type="number" class="calc-input" id="calc-amount" placeholder="输入金额" min="0" step="100">
+                    <span class="calc-label">元</span>
+                    <button class="btn btn-primary" id="calc-btn">计算</button>
+                </div>
+                <div class="calc-result" id="calc-result">
+                    <div class="calc-result-item">
+                        <span class="calc-result-label">诉讼费</span>
+                        <span class="calc-result-value" id="calc-fee">—</span>
+                    </div>
+                    <div class="calc-result-item">
+                        <span class="calc-result-label">程序类型</span>
+                        <span class="calc-result-value" id="calc-type">—</span>
+                    </div>
+                    <div class="calc-result-item">
+                        <span class="calc-result-label">审理时长</span>
+                        <span class="calc-result-value" id="calc-time">—</span>
+                    </div>
+                </div>
+                <p class="calc-note">* 此为受理费，不含鉴定、公告等其他费用。劳动仲裁免费。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 法律术语小词典 -->
+    <!-- ============================================================ -->
+    <section class="glossary-section section" id="glossary-section">
+        <div class="container">
+            <h2 class="section-title">📚 法律术语小词典</h2>
+            <p class="section-subtitle">用大白话解释你可能遇到的法律名词</p>
+
+            <div class="glossary-grid" id="glossary-grid">
+                <!-- JS动态渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 律师详情弹窗 -->
+    <!-- ============================================================ -->
+    <div class="lawyer-modal-overlay" id="lawyer-modal-overlay">
+        <div class="lawyer-modal" id="lawyer-modal">
+            <button class="lawyer-modal-close" id="lawyer-modal-close">&times;</button>
+            <div class="lawyer-modal-content" id="lawyer-modal-content">
+                <!-- JS动态渲染 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 添加律师表单弹窗 -->
+    <!-- ============================================================ -->
+    <div class="lawyer-modal-overlay" id="add-lawyer-overlay">
+        <div class="lawyer-modal" style="max-width:600px;">
+            <button class="lawyer-modal-close" id="add-lawyer-close">&times;</button>
+            <div style="padding:36px 32px;">
+                <h3 style="text-align:center;margin-bottom:24px;font-weight:600;">📝 添加律师信息</h3>
+                <form id="add-lawyer-form" style="display:flex;flex-direction:column;gap:14px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">姓名 *</label><input type="text" name="name" required class="upload-input" placeholder="律师姓名"></div>
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">律所</label><input type="text" name="firm" class="upload-input" placeholder="所属律所（留空则为个体律师）"></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">城市</label><input type="text" name="city" class="upload-input" placeholder="如：广州" value="广州"></div>
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">区县</label><input type="text" name="district" class="upload-input" placeholder="如：天河区" value="天河区"></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">执业年限</label><input type="number" name="experience" class="upload-input" placeholder="如：8" min="0" max="50"></div>
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">学历</label><input type="text" name="education" class="upload-input" placeholder="如：中山大学 法学硕士"></div>
+                    </div>
+                    <div><label style="font-size:0.82rem;color:var(--text-secondary);">擅长领域（用逗号分隔）</label><input type="text" name="fields" class="upload-input" placeholder="如：合同纠纷, 婚姻家事, 刑事辩护"></div>
+                    <div><label style="font-size:0.82rem;color:var(--text-secondary);">经手案例/执业经验</label><textarea name="cases" class="upload-input" rows="3" placeholder="简要描述该律师的代表案例或执业方向"></textarea></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">联系方式</label><input type="text" name="contact" class="upload-input" placeholder="电话或邮箱"></div>
+                        <div><label style="font-size:0.82rem;color:var(--text-secondary);">照片URL</label><input type="text" name="photo" class="upload-input" placeholder="头像链接（可选）"></div>
+                    </div>
+                    <div><label style="font-size:0.82rem;color:var(--text-secondary);">数据来源</label><input type="text" name="source" class="upload-input" placeholder="如：小红书、朋友圈、朋友推荐..."></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">✅ 提交添加</button>
+                </form>
+                <p id="add-lawyer-msg" style="text-align:center;margin-top:10px;font-size:0.82rem;color:#6a9b7a;display:none;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 免责声明 -->
+    <!-- ============================================================ -->
+    <section class="disclaimer-section">
+        <div class="container">
+            <div class="disclaimer-box">
+                <h4>⚠️ 免责声明</h4>
+                <p>本网站提供的内容仅供参考和学习，<strong>不构成正式法律意见</strong>。每个案件具体情况不同，建议在做出重要决定前咨询持证律师。网站中的律师信息来源于公开渠道，使用前请自行核实。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 页脚 -->
+    <!-- ============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2026 法律自助助手 · 让每个人都能获得基础法律指导</p>
+            <p class="footer-credit">由 Claude Code 协助搭建 · 内容仅供参考</p>
+        </div>
+    </footer>
+
+    <!-- 数据文件（通过script标签加载，file://协议100%兼容） -->
+    <script src="data/knowledge-base-data.js?v=202607222112c"></script>
+    <script src="data/lawyers-data.js?v=202607222112c"></script>
+    <script src="data/templates-data.js?v=202607222112c"></script>
+    <!-- JavaScript -->
+    <script src="js/main.js?v=202607222112c"></script>
+    <script src="js/wizard.js?v=202607222112c"></script>
+    <script src="js/lawyer-search.js?v=202607222112c"></script>
+</body>
+</html>
