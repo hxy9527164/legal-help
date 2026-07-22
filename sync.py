@@ -27,7 +27,7 @@ version = time.strftime('%Y%m%d%H%M')
 with open(BASE / 'index.html', 'r', encoding='utf-8') as f:
     html = f.read()
 html = re.sub(r'\?v=\d+', f'?v={version}', html)
-html = re.sub(r"v=\d+('\)</script>)", f"v={version}\\1", html)
+html = re.sub(r'var v="\d+"', f'var v="{version}"', html)
 with open(BASE / 'index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 print(f'  OK 版本号: {version}')
