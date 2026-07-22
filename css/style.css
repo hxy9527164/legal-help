@@ -1515,6 +1515,21 @@ input:focus-visible {
     flex-shrink: 0;
 }
 
+/* 文字评价 */
+.modal-review {
+    background: #fdfaf7;
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+}
+.modal-review p {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.9;
+    font-weight: 300;
+    margin: 0;
+}
+
 /* 分页 */
 .pagination {
     display: flex;

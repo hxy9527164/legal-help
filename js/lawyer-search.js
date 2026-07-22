@@ -438,6 +438,14 @@
                     </div>
                 </div>
 
+                ${lawyer.review ? `
+                <div class="modal-section">
+                    <h4>💬 综合评价</h4>
+                    <div class="modal-review">
+                        <p>${lawyer.review}</p>
+                    </div>
+                </div>` : ''}
+
                 <div class="modal-section" style="text-align:center;padding-top:8px;">
                     <span style="font-size:0.72rem;color:#ccc;">数据来源：${lawyer.source || '数据库'} | ${hasRealProfile ? '<a href="' + lawyer.profile_url + '" target="_blank" style="color:var(--accent);">查看原始页面 →</a>' : '模拟数据'}</span>
                 </div>
