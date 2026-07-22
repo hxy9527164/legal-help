@@ -1,6 +1,6 @@
 /* ============================================================ */
-/*  法律自助助手 - 通用交互                                        */
-/*  导航、汉堡菜单、入口卡片、平滑滚动                             */
+/*  法律自助助手 - 页面跳转式导航                                   */
+/*  点击导航→切换到目标板块  浏览器返回→回到上一个板块              */
 /* ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -11,62 +11,99 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinksEl = document.querySelector('.nav-links');
     const navAnchors = document.querySelectorAll('.nav-links a');
     const entryCards = document.querySelectorAll('.entry-card');
-
-    // ============================================================
-    //  1. 导航栏滚动效果
-    // ============================================================
+    const heroSection = document.getElementById('home');
     const allSections = document.querySelectorAll('section[id]');
+    var currentSection = 'home';
 
-    function updateNavOnScroll() {
-        const scrollY = window.scrollY;
+    // ============================================================
+    //  1. 页面切换核心函数
+    // ============================================================
+    function navigateTo(targetId, pushState) {
+        if (pushState !== false) {
+            history.pushState({ section: targetId }, '', '#' + targetId);
+        }
 
-        // 背景加阴影
-        if (scrollY > 30) {
+        // 隐藏所有section
+        allSections.forEach(function (s) {
+            s.classList.remove('active');
+        });
+        // 显示目标section
+        var target = document.getElementById(targetId);
+        if (target) {
+            target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // 更新导航高亮
+        navAnchors.forEach(function (link) {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + targetId) {
+                link.classList.add('active');
+            }
+        });
+
+        // 导航栏始终显示阴影（非首页时）
+        if (targetId !== 'home') {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
 
-        // 高亮当前区块对应的导航
-        let currentSection = '';
-        allSections.forEach(function (section) {
-            const sectionTop = section.offsetTop - 150;
-            if (scrollY >= sectionTop) {
-                currentSection = section.getAttribute('id');
-            }
-        });
-
-        navAnchors.forEach(function (link) {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + currentSection) {
-                link.classList.add('active');
-            }
-        });
+        currentSection = targetId;
     }
 
-    window.addEventListener('scroll', updateNavOnScroll, { passive: true });
+    // ============================================================
+    //  2. 初始加载——根据URL hash决定显示哪个板块
+    // ============================================================
+    var initialHash = location.hash.substring(1) || 'home';
+    // 确保目标section存在
+    if (!document.getElementById(initialHash)) initialHash = 'home';
+    // 替换初始历史记录
+    history.replaceState({ section: initialHash }, '', '#' + initialHash);
+    navigateTo(initialHash, false);
 
     // ============================================================
-    //  2. 导航链接平滑滚动
+    //  3. 浏览器前进/后退
+    // ============================================================
+    window.addEventListener('popstate', function (e) {
+        var hash = location.hash.substring(1) || 'home';
+        if (!document.getElementById(hash)) hash = 'home';
+        navigateTo(hash, false);
+    });
+
+    // ============================================================
+    //  4. 导航链接点击
     // ============================================================
     navAnchors.forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const target = document.getElementById(targetId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-                // 手机端关闭菜单
-                navLinksEl.classList.remove('open');
-                hamburger.classList.remove('active');
+            var targetId = this.getAttribute('href').substring(1);
+            if (targetId && document.getElementById(targetId)) {
+                navigateTo(targetId);
             }
+            navLinksEl.classList.remove('open');
+            hamburger.classList.remove('active');
         });
     });
 
+    // Logo点击→回首页
     document.querySelector('.nav-logo').addEventListener('click', function (e) {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        navigateTo('home');
     });
+
+    // ============================================================
+    //  5. 首页入口卡片→跳转对应板块
+    // ============================================================
+    entryCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            var targetId = this.getAttribute('data-target');
+            if (targetId) navigateTo(targetId);
+        });
+    });
+
+    // 移除旧的滚动监听，改为hash监听已经覆盖
+    // 保留汉堡菜单逻辑
 
     // ============================================================
     //  3. 汉堡菜单

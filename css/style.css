@@ -40,7 +40,10 @@ body {
 }
 
 .container { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
-.section { padding: 100px 0; }
+.section { padding: 100px 0; display: none; }
+.section.active { display: block; animation: pageIn 0.35s ease; }
+#home.section { display: none; }
+#home.section.active { display: flex; }
 
 a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
 a:hover { color: #8b6d4a; }
@@ -331,6 +334,38 @@ a:hover { color: #8b6d4a; }
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
 }
+@keyframes pageIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 返回首页按钮 */
+.back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: all var(--transition);
+    font-weight: 400;
+}
+.back-home:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.section-title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.section-title-row .section-title { margin-bottom: 0; text-align: left; }
 
 .wizard-question {
     font-size: 1.2rem;
