@@ -553,7 +553,7 @@
 
     function renderTemplateCategories() {
         const categories = [...new Set(templatesData.map(function (t) { return t.category; }))];
-        const catNames = { 'consumer': '消费纠纷', 'labor': '劳动纠纷', 'housing': '住房邻里', 'family': '婚姻家庭' };
+        const catNames = { 'consumer': '消费纠纷', 'labor': '劳动纠纷', 'housing': '住房邻里', 'family': '婚姻家庭', 'traffic': '交通事故', 'lending': '民间借贷', 'tort': '侵权损害' };
 
         // "全部"按钮
         const allBtn = document.createElement('button');
