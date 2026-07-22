@@ -21,6 +21,8 @@
     const filterDistrict = document.getElementById('filter-district');
     const filterFirm = document.getElementById('filter-firm');
     const filterField = document.getElementById('filter-field');
+    const filterExperience = document.getElementById('filter-experience');
+    const filterSort = document.getElementById('filter-sort');
     const lawyerNoResults = document.getElementById('lawyer-no-results');
 
     var currentPage = 1;
@@ -472,8 +474,10 @@
         var province = filterProvince ? filterProvince.value : '';
         var city = filterCity ? filterCity.value : '';
         var district = filterDistrict ? filterDistrict.value : '';
+        var experience = filterExperience ? filterExperience.value : '';
         var firm = filterFirm ? filterFirm.value : '';
         var field = filterField ? filterField.value : '';
+        var sort = filterSort ? filterSort.value : '';
 
         var filtered = lawyersData.filter(function (l) {
             var matchSearch = !searchTerm ||
@@ -485,11 +489,29 @@
             var matchProvince = !province || l.province === province;
             var matchCity = !city || l.city === city;
             var matchDistrict = !district || l.district === district;
+
+            // 执业年限筛选
+            var matchExperience = true;
+            if (experience) {
+                var parts = experience.split('-');
+                var min = parseInt(parts[0]);
+                var max = parseInt(parts[1]);
+                var exp = l.experience || 0;
+                matchExperience = exp >= min && exp <= max;
+            }
+
             var matchFirm = !firm || l.firm === firm;
             var matchField = !field || l.fields.indexOf(field) > -1;
 
-            return matchSearch && matchProvince && matchCity && matchDistrict && matchFirm && matchField;
+            return matchSearch && matchProvince && matchCity && matchDistrict && matchExperience && matchFirm && matchField;
         });
+
+        // 排序
+        if (sort === 'exp-desc') {
+            filtered.sort(function (a, b) { return (b.experience || 0) - (a.experience || 0); });
+        } else if (sort === 'exp-asc') {
+            filtered.sort(function (a, b) { return (a.experience || 0) - (b.experience || 0); });
+        }
 
         renderLawyers(filtered);
     }
@@ -505,6 +527,8 @@
     if (filterDistrict) filterDistrict.addEventListener('change', filterLawyers);
     if (filterFirm) filterFirm.addEventListener('change', filterLawyers);
     if (filterField) filterField.addEventListener('change', filterLawyers);
+    if (filterExperience) filterExperience.addEventListener('change', filterLawyers);
+    if (filterSort) filterSort.addEventListener('change', filterLawyers);
 
     // 分页按钮
     if (pagePrev) pagePrev.addEventListener('click', function () {

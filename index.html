@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var v="202607222038";if(location.search.indexOf(v)===-1&&location.hostname){location.search="?v="+v}})()</script>
+    <script>(function(){var v="202607222043";if(location.search.indexOf(v)===-1&&location.hostname){location.search="?v="+v}})()</script>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -148,6 +148,9 @@
             <!-- 搜索和筛选 -->
             <div class="lawyer-search-bar">
                 <input type="text" class="search-input" id="lawyer-search" placeholder="搜索律师姓名、律所或擅长领域...">
+                <button class="btn btn-primary" id="btn-add-lawyer" style="white-space:nowrap;padding:12px 18px;">+ 添加律师</button>
+            </div>
+            <div class="lawyer-filter-row">
                 <select class="search-select" id="filter-province">
                     <option value="">全部省份</option>
                 </select>
@@ -157,13 +160,24 @@
                 <select class="search-select" id="filter-district">
                     <option value="">全部区县</option>
                 </select>
+                <select class="search-select" id="filter-experience">
+                    <option value="">全部经验</option>
+                    <option value="0-3">3年以下</option>
+                    <option value="4-7">4-7年</option>
+                    <option value="8-15">8-15年</option>
+                    <option value="16-99">16年以上</option>
+                </select>
                 <select class="search-select" id="filter-firm">
                     <option value="">全部律所</option>
                 </select>
                 <select class="search-select" id="filter-field">
                     <option value="">全部领域</option>
                 </select>
-                <button class="btn btn-primary" id="btn-add-lawyer" style="white-space:nowrap;padding:12px 18px;">+ 添加律师</button>
+                <select class="search-select" id="filter-sort">
+                    <option value="">默认排序</option>
+                    <option value="exp-desc">经验从高到低</option>
+                    <option value="exp-asc">经验从低到高</option>
+                </select>
             </div>
 
             <!-- 律师列表 -->
@@ -403,12 +417,12 @@
     </footer>
 
     <!-- 数据文件（通过script标签加载，file://协议100%兼容） -->
-    <script src="data/knowledge-base-data.js?v=202607222038c"></script>
-    <script src="data/lawyers-data.js?v=202607222038c"></script>
-    <script src="data/templates-data.js?v=202607222038c"></script>
+    <script src="data/knowledge-base-data.js?v=202607222043c"></script>
+    <script src="data/lawyers-data.js?v=202607222043c"></script>
+    <script src="data/templates-data.js?v=202607222043c"></script>
     <!-- JavaScript -->
-    <script src="js/main.js?v=202607222038c"></script>
-    <script src="js/wizard.js?v=202607222038c"></script>
-    <script src="js/lawyer-search.js?v=202607222038c"></script>
+    <script src="js/main.js?v=202607222043c"></script>
+    <script src="js/wizard.js?v=202607222043c"></script>
+    <script src="js/lawyer-search.js?v=202607222043c"></script>
 </body>
 </html>

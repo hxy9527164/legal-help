@@ -654,16 +654,25 @@ a:hover { color: #8b6d4a; }
 /* ============================================================ */
 .lawyer-search-bar {
     display: flex;
-    gap: 8px;
-    margin-bottom: 40px;
+    gap: 10px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
     align-items: center;
 }
-.lawyer-search-bar .search-select {
-    min-width: 100px;
-    padding: 12px 28px 12px 12px;
-    font-size: 0.82rem;
+.lawyer-filter-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    align-items: center;
 }
+.lawyer-filter-row .search-select {
+    min-width: 90px;
+    padding: 9px 24px 9px 10px;
+    font-size: 0.78rem;
+    background-position: right 8px center;
+}
+.lawyer-search-bar .search-select { font-size: 0.88rem; }
 .search-input {
     flex: 1;
     min-width: 240px;
