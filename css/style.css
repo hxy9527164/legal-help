@@ -619,9 +619,15 @@ a:hover { color: #8b6d4a; }
 /* ============================================================ */
 .lawyer-search-bar {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 40px;
     flex-wrap: wrap;
+    align-items: center;
+}
+.lawyer-search-bar .search-select {
+    min-width: 100px;
+    padding: 12px 28px 12px 12px;
+    font-size: 0.82rem;
 }
 .search-input {
     flex: 1;

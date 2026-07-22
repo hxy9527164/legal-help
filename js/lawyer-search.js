@@ -12,6 +12,8 @@
     const lawyerGrid = document.getElementById('lawyer-grid');
     const lawyerCount = document.getElementById('lawyer-count');
     const lawyerSearch = document.getElementById('lawyer-search');
+    const filterProvince = document.getElementById('filter-province');
+    const filterCity = document.getElementById('filter-city');
     const filterDistrict = document.getElementById('filter-district');
     const filterFirm = document.getElementById('filter-firm');
     const filterField = document.getElementById('filter-field');
@@ -153,16 +155,14 @@
     //  律师搜索
     // ============================================================
 
-    // 填充筛选下拉框
+    // 填充筛选下拉框（省→市→区三级联动）
     function populateFilters() {
-        // 地区（区县级）
-        if (filterDistrict) {
-            var districts = [...new Set(lawyersData.map(function (l) { return l.district; }).filter(Boolean))].sort();
-            districts.forEach(function (d) {
-                var option = document.createElement('option');
-                option.value = d;
-                option.textContent = d;
-                filterDistrict.appendChild(option);
+        // 省份（始终显示全部）
+        if (filterProvince) {
+            var provinces = [...new Set(lawyersData.map(function (l) { return l.province; }).filter(Boolean))].sort();
+            provinces.forEach(function (p) {
+                var opt = document.createElement('option'); opt.value = p; opt.textContent = p;
+                filterProvince.appendChild(opt);
             });
         }
 
@@ -170,27 +170,75 @@
         if (filterFirm) {
             var firms = [...new Set(lawyersData.map(function (l) { return l.firm; }).filter(Boolean))].sort();
             firms.forEach(function (f) {
-                var option = document.createElement('option');
-                option.value = f;
-                option.textContent = f.length > 25 ? f.substring(0, 25) + '...' : f;
-                filterFirm.appendChild(option);
+                var opt = document.createElement('option'); opt.value = f;
+                opt.textContent = f.length > 25 ? f.substring(0, 25) + '...' : f;
+                filterFirm.appendChild(opt);
             });
         }
 
         // 领域
         if (filterField) {
             var allFields = [];
-            lawyersData.forEach(function (l) {
-                allFields.push.apply(allFields, l.fields);
-            });
+            lawyersData.forEach(function (l) { allFields.push.apply(allFields, l.fields); });
             var uniqueFields = [...new Set(allFields)].sort();
             uniqueFields.forEach(function (f) {
-                var option = document.createElement('option');
-                option.value = f;
-                option.textContent = f;
-                filterField.appendChild(option);
+                var opt = document.createElement('option'); opt.value = f; opt.textContent = f;
+                filterField.appendChild(opt);
             });
         }
+
+        // 初始填充城市和区县（显示全部）
+        populateCityDropdown();
+        populateDistrictDropdown();
+    }
+
+    // 根据选中省份填充城市
+    function populateCityDropdown() {
+        if (!filterCity) return;
+        var province = filterProvince ? filterProvince.value : '';
+        var cities = [...new Set(lawyersData
+            .filter(function (l) { return !province || l.province === province; })
+            .map(function (l) { return l.city; })
+            .filter(Boolean))].sort();
+        filterCity.innerHTML = '<option value="">全部城市</option>';
+        cities.forEach(function (c) {
+            var opt = document.createElement('option'); opt.value = c; opt.textContent = c;
+            filterCity.appendChild(opt);
+        });
+    }
+
+    // 根据选中省份+城市填充区县
+    function populateDistrictDropdown() {
+        if (!filterDistrict) return;
+        var province = filterProvince ? filterProvince.value : '';
+        var city = filterCity ? filterCity.value : '';
+        var districts = [...new Set(lawyersData
+            .filter(function (l) {
+                return (!province || l.province === province) && (!city || l.city === city);
+            })
+            .map(function (l) { return l.district; })
+            .filter(Boolean))].sort();
+        filterDistrict.innerHTML = '<option value="">全部区县</option>';
+        districts.forEach(function (d) {
+            var opt = document.createElement('option'); opt.value = d; opt.textContent = d;
+            filterDistrict.appendChild(opt);
+        });
+    }
+
+    // 省份变更 → 重新填充城市 + 区县
+    if (filterProvince) {
+        filterProvince.addEventListener('change', function () {
+            populateCityDropdown();
+            populateDistrictDropdown();
+            filterLawyers();
+        });
+    }
+    // 城市变更 → 重新填充区县
+    if (filterCity) {
+        filterCity.addEventListener('change', function () {
+            populateDistrictDropdown();
+            filterLawyers();
+        });
     }
 
     // 渲染律师卡片（带照片缩略图 + 点击查看详情）
@@ -390,6 +438,8 @@
     // 搜索和筛选
     function filterLawyers() {
         var searchTerm = lawyerSearch ? lawyerSearch.value.trim().toLowerCase() : '';
+        var province = filterProvince ? filterProvince.value : '';
+        var city = filterCity ? filterCity.value : '';
         var district = filterDistrict ? filterDistrict.value : '';
         var firm = filterFirm ? filterFirm.value : '';
         var field = filterField ? filterField.value : '';
@@ -401,11 +451,13 @@
                 l.fields.some(function (f) { return f.toLowerCase().indexOf(searchTerm) > -1; }) ||
                 (l.cases || '').toLowerCase().indexOf(searchTerm) > -1;
 
+            var matchProvince = !province || l.province === province;
+            var matchCity = !city || l.city === city;
             var matchDistrict = !district || l.district === district;
             var matchFirm = !firm || l.firm === firm;
             var matchField = !field || l.fields.indexOf(field) > -1;
 
-            return matchSearch && matchDistrict && matchFirm && matchField;
+            return matchSearch && matchProvince && matchCity && matchDistrict && matchFirm && matchField;
         });
 
         renderLawyers(filtered);

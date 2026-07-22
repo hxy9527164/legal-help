@@ -145,8 +145,14 @@
             <!-- 搜索和筛选 -->
             <div class="lawyer-search-bar">
                 <input type="text" class="search-input" id="lawyer-search" placeholder="搜索律师姓名、律所或擅长领域...">
+                <select class="search-select" id="filter-province">
+                    <option value="">全部省份</option>
+                </select>
+                <select class="search-select" id="filter-city">
+                    <option value="">全部城市</option>
+                </select>
                 <select class="search-select" id="filter-district">
-                    <option value="">全部地区</option>
+                    <option value="">全部区县</option>
                 </select>
                 <select class="search-select" id="filter-firm">
                     <option value="">全部律所</option>
@@ -389,12 +395,12 @@
     </footer>
 
     <!-- 数据文件（通过script标签加载，file://协议100%兼容） -->
-    <script src="data/knowledge-base-data.js?v=202607222014c"></script>
-    <script src="data/lawyers-data.js?v=202607222014c"></script>
-    <script src="data/templates-data.js?v=202607222014c"></script>
+    <script src="data/knowledge-base-data.js?v=202607222019c"></script>
+    <script src="data/lawyers-data.js?v=202607222019c"></script>
+    <script src="data/templates-data.js?v=202607222019c"></script>
     <!-- JavaScript -->
-    <script src="js/main.js?v=202607222014c"></script>
-    <script src="js/wizard.js?v=202607222014c"></script>
-    <script src="js/lawyer-search.js?v=202607222014c"></script>
+    <script src="js/main.js?v=202607222019c"></script>
+    <script src="js/wizard.js?v=202607222019c"></script>
+    <script src="js/lawyer-search.js?v=202607222019c"></script>
 </body>
 </html>
