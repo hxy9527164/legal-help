@@ -1506,6 +1506,42 @@ input:focus-visible {
     flex-shrink: 0;
 }
 
+/* 分页 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 0 8px;
+}
+.page-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: all var(--transition);
+    font-weight: 400;
+}
+.page-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.page-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+.page-info {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    min-width: 120px;
+    text-align: center;
+}
+
 /* 上传表单 */
 .upload-input {
     width: 100%;

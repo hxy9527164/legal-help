@@ -11,6 +11,10 @@
     // DOM
     const lawyerGrid = document.getElementById('lawyer-grid');
     const lawyerCount = document.getElementById('lawyer-count');
+    const lawyerPagination = document.getElementById('lawyer-pagination');
+    const pagePrev = document.getElementById('page-prev');
+    const pageNext = document.getElementById('page-next');
+    const pageInfo = document.getElementById('page-info');
     const lawyerSearch = document.getElementById('lawyer-search');
     const filterProvince = document.getElementById('filter-province');
     const filterCity = document.getElementById('filter-city');
@@ -18,6 +22,10 @@
     const filterFirm = document.getElementById('filter-firm');
     const filterField = document.getElementById('filter-field');
     const lawyerNoResults = document.getElementById('lawyer-no-results');
+
+    var currentPage = 1;
+    var pageSize = 10;
+    var currentFilteredLawyers = [];
 
     const templateList = document.getElementById('template-list');
     const templateFilters = document.getElementById('template-filters');
@@ -241,21 +249,44 @@
         });
     }
 
-    // 渲染律师卡片（带照片缩略图 + 点击查看详情）
+    // 渲染律师卡片（带分页）
     function renderLawyers(lawyers) {
         lawyerGrid.innerHTML = '';
+        currentFilteredLawyers = lawyers;
+        currentPage = 1;
+        renderCurrentPage();
+    }
+
+    function renderCurrentPage() {
+        lawyerGrid.innerHTML = '';
+        var lawyers = currentFilteredLawyers;
+        var totalPages = Math.ceil(lawyers.length / pageSize);
+        var start = (currentPage - 1) * pageSize;
+        var end = Math.min(start + pageSize, lawyers.length);
+        var pageLawyers = lawyers.slice(start, end);
 
         if (lawyerCount) {
-            lawyerCount.textContent = '共找到 ' + lawyers.length + ' 位律师（点击卡片查看详情）';
+            lawyerCount.textContent = '共找到 ' + lawyers.length + ' 位律师，第 ' + (start + 1) + '-' + end + ' 条（点击卡片查看详情）';
         }
 
         if (lawyers.length === 0) {
             lawyerNoResults.style.display = 'block';
+            if (lawyerPagination) lawyerPagination.style.display = 'none';
             return;
         }
         lawyerNoResults.style.display = 'none';
 
-        lawyers.forEach(function (lawyer) {
+        // 渲染分页按钮
+        if (lawyerPagination && totalPages > 1) {
+            lawyerPagination.style.display = 'flex';
+            if (pagePrev) pagePrev.disabled = currentPage <= 1;
+            if (pageNext) pageNext.disabled = currentPage >= totalPages;
+            if (pageInfo) pageInfo.textContent = currentPage + ' / ' + totalPages + ' 页';
+        } else if (lawyerPagination) {
+            lawyerPagination.style.display = 'none';
+        }
+
+        pageLawyers.forEach(function (lawyer) {
             var card = document.createElement('div');
             card.className = 'lawyer-card';
             card.setAttribute('data-id', lawyer.id);
@@ -474,6 +505,15 @@
     if (filterDistrict) filterDistrict.addEventListener('change', filterLawyers);
     if (filterFirm) filterFirm.addEventListener('change', filterLawyers);
     if (filterField) filterField.addEventListener('change', filterLawyers);
+
+    // 分页按钮
+    if (pagePrev) pagePrev.addEventListener('click', function () {
+        if (currentPage > 1) { currentPage--; renderCurrentPage(); window.scrollTo({ top: lawyerGrid.offsetTop - 100, behavior: 'smooth' }); }
+    });
+    if (pageNext) pageNext.addEventListener('click', function () {
+        var totalPages = Math.ceil(currentFilteredLawyers.length / pageSize);
+        if (currentPage < totalPages) { currentPage++; renderCurrentPage(); window.scrollTo({ top: lawyerGrid.offsetTop - 100, behavior: 'smooth' }); }
+    });
 
     // ============================================================
     //  文书模板
