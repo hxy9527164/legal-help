@@ -121,12 +121,13 @@
         var allNode = createTreeNode('all', 'all', '📚 全部法律条文', true);
         sidebarTree.appendChild(allNode);
 
-        // 中国法节点
-        var cnNode = createTreeParent('cn-group', '🇨🇳 中国法律');
+        // 中国法节点（默认展开）
+        var cnNode = createTreeParent('cn-group', '🇨🇳 中国法律', false);
         sidebarTree.appendChild(cnNode);
 
         Object.keys(branchConfig).forEach(function (branchKey) {
             var cfg = branchConfig[branchKey];
+            // 分支节点默认折叠，点击展开查看子分类
             var branchNode = createTreeParent('branch-' + branchKey, cfg.icon + ' ' + cfg.name, true);
 
             Object.keys(cfg.children).forEach(function (subKey) {
@@ -139,12 +140,11 @@
         });
 
         // 国际对比节点
-        var intlNode = createTreeParent('intl-group', '🌍 国际法律对比');
+        var intlNode = createTreeParent('intl-group', '🌍 国际法律对比', false);
         sidebarTree.appendChild(intlNode);
 
         ['US','EU','JP','KR'].forEach(function (cc) {
-            var name = countryConfig[cc].replace(/[🇺🇸🇪🇺🇯🇵🇰🇷]\s*/, '');
-            var intlChild = createTreeNode('intl', cc, countryConfig[cc].split(' ')[0] + ' ' + name, true);
+            var intlChild = createTreeNode('intl', cc, countryConfig[cc], true);
             intlNode.querySelector('.tree-children').appendChild(intlChild);
         });
     }
@@ -173,14 +173,15 @@
         return node;
     }
 
-    function createTreeParent(id, label) {
+    function createTreeParent(id, label, collapsed) {
         var container = document.createElement('div');
         container.className = 'tree-parent';
         container.id = id;
 
         var header = document.createElement('div');
         header.className = 'tree-parent-header';
-        header.innerHTML = '<span class="tree-toggle">▶</span> <span class="tree-parent-label">' + label + '</span>';
+        var isCollapsed = collapsed !== false; // 默认折叠
+        header.innerHTML = '<span class="tree-toggle">' + (isCollapsed ? '▶' : '▼') + '</span> <span class="tree-parent-label">' + label + '</span>';
         header.addEventListener('click', function () {
             var children = container.querySelector('.tree-children');
             var toggle = container.querySelector('.tree-toggle');
@@ -195,6 +196,7 @@
 
         var children = document.createElement('div');
         children.className = 'tree-children';
+        if (isCollapsed) children.style.display = 'none';
 
         container.appendChild(header);
         container.appendChild(children);
@@ -496,9 +498,13 @@
         var nextBtn = document.getElementById('provision-page-next');
         if (prevBtn) prevBtn.addEventListener('click', function () {
             if (currentPage > 1) { currentPage--; renderProvisionCards(currentFiltered); document.getElementById('legal-db-section').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            var legalSection = document.getElementById('legal-db-section');
+            if (legalSection) legalSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
         if (nextBtn) nextBtn.addEventListener('click', function () {
-            if (currentPage < Math.ceil(currentFiltered.length / pageSize)) { currentPage++; renderProvisionCards(currentFiltered); document.getElementById('legal-db-section').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            if (currentPage < Math.ceil(currentFiltered.length / pageSize)) { currentPage++; renderProvisionCards(currentFiltered); }
+            var legalSection2 = document.getElementById('legal-db-section');
+            if (legalSection2) legalSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     }
 
