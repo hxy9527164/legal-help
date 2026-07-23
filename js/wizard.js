@@ -6,6 +6,12 @@
 (function () {
     'use strict';
 
+    function escapeHTML(str) {
+        var div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+    }
+
     window.knowledgeBase = null;    // 知识库数据（全局暴露，供其他模块使用）
     let selectedCategory = null;    // 当前选中的领域
     let selectedScenario = null;    // 当前选中的场景
@@ -265,7 +271,7 @@
         plan.steps.forEach(function (step) {
             const li = document.createElement('li');
             li.setAttribute('data-step', step.order);
-            li.innerHTML = '<strong>' + step.title + '</strong><br>' + step.detail;
+            li.innerHTML = '<strong>' + escapeHTML(step.title) + '</strong><br>' + escapeHTML(step.detail);
             stepsList.appendChild(li);
         });
         stepsSection.appendChild(stepsList);
@@ -313,7 +319,7 @@
         contactsList.className = 'plan-contacts';
         plan.contacts.forEach(function (c) {
             const li = document.createElement('li');
-            li.innerHTML = '<strong>' + c.name + '</strong>：' + c.detail;
+            li.innerHTML = '<strong>' + escapeHTML(c.name) + '</strong>：' + escapeHTML(c.detail);
             contactsList.appendChild(li);
         });
         contactsSection.appendChild(contactsList);
@@ -400,7 +406,7 @@
         // 更新步骤指示器
         const steps = wizardSteps.querySelectorAll('.w-step');
         steps.forEach(function (step) {
-            const s = parseInt(step.getAttribute('data-step'));
+            const s = parseInt(step.getAttribute('data-step'), 10);
             step.classList.remove('active', 'done');
             if (s === stepNum) step.classList.add('active');
             if (s < stepNum) step.classList.add('done');

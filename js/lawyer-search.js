@@ -5,6 +5,12 @@
 (function () {
     'use strict';
 
+    function escapeHTML(str) {
+        var div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+    }
+
     let lawyersData = [];
     let templatesData = [];
 
@@ -297,14 +303,14 @@
             });
 
             var fieldsHTML = lawyer.fields.slice(0, 5).map(function (f) {
-                return '<span class="lawyer-field-tag">' + f + '</span>';
+                return '<span class="lawyer-field-tag">' + escapeHTML(f) + '</span>';
             }).join('');
 
             var hasPhoto = lawyer.photo && lawyer.photo.startsWith('http');
             var photoHTML = hasPhoto
-                ? '<img class="lawyer-photo-thumb" src="' + lawyer.photo + '" alt="' + lawyer.name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+                ? '<img class="lawyer-photo-thumb" src="' + escapeHTML(lawyer.photo) + '" alt="' + escapeHTML(lawyer.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
                 : '';
-            var placeholderHTML = '<div class="lawyer-photo-placeholder"' + (hasPhoto ? ' style="display:none"' : '') + '>' + lawyer.name.charAt(0) + '</div>';
+            var placeholderHTML = '<div class="lawyer-photo-placeholder"' + (hasPhoto ? ' style="display:none"' : '') + '>' + escapeHTML(lawyer.name.charAt(0)) + '</div>';
 
             var hasRealProfile = lawyer.profile_url && lawyer.profile_url.startsWith('http');
             var verifiedBadge = hasRealProfile
@@ -323,17 +329,17 @@
                     <div class="lawyer-card-left">
                         ${photoHTML}${placeholderHTML}
                         <div>
-                            <div class="lawyer-name">${lawyer.name} ${verifiedBadge}</div>
-                            <div class="lawyer-firm">${lawyer.firm}</div>
+                            <div class="lawyer-name">${escapeHTML(lawyer.name)} ${verifiedBadge}</div>
+                            <div class="lawyer-firm">${escapeHTML(lawyer.firm)}</div>
                         </div>
                     </div>
                     <div>
                         ${expBadge}
-                        <div style="color:#94a3b8;font-size:0.75rem;text-align:right;margin-top:4px;">${districtInfo}</div>
+                        <div style="color:#94a3b8;font-size:0.75rem;text-align:right;margin-top:4px;">${escapeHTML(districtInfo)}</div>
                     </div>
                 </div>
                 <div class="lawyer-fields">${fieldsHTML}</div>
-                <div class="lawyer-cases">📂 ${(lawyer.cases || '').substring(0, 80)}${(lawyer.cases || '').length > 80 ? '...' : ''}</div>
+                <div class="lawyer-cases">📂 ${escapeHTML((lawyer.cases || '').substring(0, 80))}${(lawyer.cases || '').length > 80 ? '...' : ''}</div>
                 <div class="lawyer-card-hint">点击查看详情 →</div>
             `;
             lawyerGrid.appendChild(card);
@@ -348,15 +354,16 @@
         var content = document.getElementById('lawyer-modal-content');
         if (!overlay || !content) return;
 
+        var en = escapeHTML;
         var hasPhoto = lawyer.photo && lawyer.photo.startsWith('http');
         var photoEl = hasPhoto
-            ? '<img class="modal-photo" src="' + lawyer.photo + '" alt="' + lawyer.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+            ? '<img class="modal-photo" src="' + en(lawyer.photo) + '" alt="' + en(lawyer.name) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
             : '';
-        var placeholderEl = '<div class="modal-photo-placeholder"' + (hasPhoto ? ' style="display:none"' : '') + '>' + lawyer.name.charAt(0) + '</div>';
+        var placeholderEl = '<div class="modal-photo-placeholder"' + (hasPhoto ? ' style="display:none"' : '') + '>' + en(lawyer.name.charAt(0)) + '</div>';
 
         var position = lawyer.position || '';
         var fieldsAll = (lawyer.fields || []).map(function (f) {
-            return '<span class="modal-field-tag">' + f + '</span>';
+            return '<span class="modal-field-tag">' + en(f) + '</span>';
         }).join('');
 
         // Calculate analysis scores based on available data
@@ -374,19 +381,19 @@
         content.innerHTML = `
             <div class="modal-header">
                 ${photoEl}${placeholderEl}
-                <div class="modal-name">${lawyer.name}</div>
-                ${position ? '<div class="modal-position">' + position + '</div>' : ''}
-                <div class="modal-firm">${lawyer.firm}</div>
+                <div class="modal-name">${en(lawyer.name)}</div>
+                ${position ? '<div class="modal-position">' + en(position) + '</div>' : ''}
+                <div class="modal-firm">${en(lawyer.firm)}</div>
             </div>
             <div class="modal-body">
                 <div class="modal-section">
                     <h4>📋 基本信息</h4>
-                    <div class="modal-info-row"><span class="modal-info-label">执业地区</span><span class="modal-info-value">${lawyer.province} ${lawyer.city} ${lawyer.district || ''}</span></div>
+                    <div class="modal-info-row"><span class="modal-info-label">执业地区</span><span class="modal-info-value">${en(lawyer.province)} ${en(lawyer.city)} ${en(lawyer.district || '')}</span></div>
                     <div class="modal-info-row"><span class="modal-info-label">执业年限</span><span class="modal-info-value">${lawyer.experience || '暂无'} 年</span></div>
-                    <div class="modal-info-row"><span class="modal-info-label">学历背景</span><span class="modal-info-value">${lawyer.education || '暂无学历信息'}</span></div>
-                    <div class="modal-info-row"><span class="modal-info-label">执业证号</span><span class="modal-info-value">${lawyer.license || '暂无'}</span></div>
-                    <div class="modal-info-row"><span class="modal-info-label">联系方式</span><span class="modal-info-value">${lawyer.contact || '暂无联系方式'}</span></div>
-                    ${lawyer.languages ? '<div class="modal-info-row"><span class="modal-info-label">工作语言</span><span class="modal-info-value">' + lawyer.languages + '</span></div>' : ''}
+                    <div class="modal-info-row"><span class="modal-info-label">学历背景</span><span class="modal-info-value">${en(lawyer.education || '暂无学历信息')}</span></div>
+                    <div class="modal-info-row"><span class="modal-info-label">执业证号</span><span class="modal-info-value">${en(lawyer.license || '暂无')}</span></div>
+                    <div class="modal-info-row"><span class="modal-info-label">联系方式</span><span class="modal-info-value">${en(lawyer.contact || '暂无联系方式')}</span></div>
+                    ${lawyer.languages ? '<div class="modal-info-row"><span class="modal-info-label">工作语言</span><span class="modal-info-value">' + en(lawyer.languages) + '</span></div>' : ''}
                     ${lawyer.service_count ? '<div class="modal-info-row"><span class="modal-info-label">服务次数</span><span class="modal-info-value">' + lawyer.service_count + ' 次</span></div>' : ''}
                 </div>
 
@@ -397,10 +404,10 @@
 
                 <div class="modal-section">
                     <h4>📂 经手案件 / 执业经验</h4>
-                    <div class="modal-cases"><p>${lawyer.cases || '暂无案例信息'}</p></div>
+                    <div class="modal-cases"><p>${en(lawyer.cases || '暂无案例信息')}</p></div>
                 </div>
 
-                ${lawyer.awards ? '<div class="modal-section"><h4>🏆 荣誉奖项</h4><div class="modal-cases"><p>' + lawyer.awards + '</p></div></div>' : ''}
+                ${lawyer.awards ? '<div class="modal-section"><h4>🏆 荣誉奖项</h4><div class="modal-cases"><p>' + en(lawyer.awards) + '</p></div></div>' : ''}
 
                 <div class="modal-section">
                     <h4>📊 律师专业度分析</h4>
@@ -442,12 +449,12 @@
                 <div class="modal-section">
                     <h4>💬 综合评价</h4>
                     <div class="modal-review">
-                        <p>${lawyer.review}</p>
+                        <p>${en(lawyer.review)}</p>
                     </div>
                 </div>` : ''}
 
                 <div class="modal-section" style="text-align:center;padding-top:8px;">
-                    <span style="font-size:0.72rem;color:#ccc;">数据来源：${lawyer.source || '数据库'} | ${hasRealProfile ? '<a href="' + lawyer.profile_url + '" target="_blank" style="color:var(--accent);">查看原始页面 →</a>' : '模拟数据'}</span>
+                    <span style="font-size:0.72rem;color:#ccc;">数据来源：${en(lawyer.source || '数据库')} | ${hasRealProfile ? '<a href="' + en(lawyer.profile_url) + '" target="_blank" style="color:var(--accent);">查看原始页面 →</a>' : '模拟数据'}</span>
                 </div>
             </div>
         `;
