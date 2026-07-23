@@ -1663,6 +1663,607 @@ input:focus-visible {
 }
 
 /* ============================================================ */
+/*  关怀版模式 — 专为老年用户设计                                    */
+/*  大字 大按钮 高对比度 简洁布局 暖色调                              */
+/* ============================================================ */
+body.care-mode {
+    /* 基础放大 */
+    font-size: 20px;
+    line-height: 2;
+    --bg: #fffef9;
+    --bg-card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --border: #d0d0d0;
+    --border-light: #ccc;
+    --accent: #c0392b;
+    --accent-dim: rgba(192, 57, 43, 0.08);
+    --radius: 12px;
+    --radius-sm: 10px;
+    --shadow-md: 0 6px 24px rgba(0,0,0,0.1);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+/* ---------- 关怀版 - 导航栏 ---------- */
+body.care-mode .navbar {
+    padding: 20px 0;
+    background: rgba(255, 255, 249, 0.96);
+}
+body.care-mode .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+body.care-mode .nav-links a {
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 10px 6px;
+    letter-spacing: 0.5px;
+}
+body.care-mode .nav-links {
+    gap: 24px;
+}
+
+/* ---------- 关怀版 - 容器 ---------- */
+body.care-mode .container {
+    max-width: 860px;
+    padding: 0 32px;
+}
+
+/* ---------- 关怀版 - 标题 ---------- */
+body.care-mode .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+body.care-mode .section-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 64px;
+}
+body.care-mode .hero-title-main {
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+body.care-mode .hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 2.2;
+    max-width: 600px;
+}
+body.care-mode .hero-badge {
+    font-size: 1.05rem;
+    padding: 8px 22px;
+}
+
+/* ---------- 关怀版 - 按钮 ---------- */
+body.care-mode .btn {
+    padding: 16px 36px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-radius: 10px;
+    min-height: 52px;
+}
+body.care-mode .btn-large {
+    padding: 20px 48px;
+    font-size: 1.3rem;
+    min-height: 60px;
+}
+body.care-mode .copy-btn {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    min-height: 52px;
+}
+
+/* ---------- 关怀版 - Hero 入口卡片 ---------- */
+body.care-mode .hero {
+    min-height: auto;
+    padding: 160px 0 100px;
+}
+body.care-mode .entry-cards {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    gap: 24px;
+}
+body.care-mode .entry-card {
+    padding: 48px 36px;
+    border-radius: 14px;
+    border-width: 2px;
+}
+body.care-mode .entry-card h3 {
+    font-size: 1.4rem;
+}
+body.care-mode .entry-card p {
+    font-size: 1.08rem;
+    line-height: 1.9;
+}
+body.care-mode .entry-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+body.care-mode .entry-arrow {
+    font-size: 1.1rem;
+}
+
+/* ---------- 关怀版 - 向导 ---------- */
+body.care-mode .wizard-steps {
+    gap: 16px;
+}
+body.care-mode .w-step {
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    min-height: 52px;
+}
+body.care-mode .w-step .step-num {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+}
+body.care-mode .wizard-question {
+    font-size: 1.5rem;
+    margin-bottom: 48px;
+}
+body.care-mode .wizard-back {
+    font-size: 1.1rem;
+}
+body.care-mode .back-home {
+    font-size: 1.05rem;
+    padding: 12px 24px;
+    min-height: 48px;
+}
+
+/* ---------- 关怀版 - 领域/场景卡片 ---------- */
+body.care-mode .category-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+body.care-mode .category-card {
+    padding: 40px 32px;
+    border-radius: 12px;
+    border-width: 2px;
+}
+body.care-mode .category-card .cat-icon {
+    font-size: 2.5rem;
+}
+body.care-mode .category-card .cat-name {
+    font-size: 1.3rem;
+}
+body.care-mode .category-card .cat-desc {
+    font-size: 1.05rem;
+}
+body.care-mode .scenario-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+body.care-mode .scenario-card {
+    padding: 28px 24px;
+    border-radius: 10px;
+}
+body.care-mode .scenario-card h4 {
+    font-size: 1.2rem;
+}
+body.care-mode .scenario-card p {
+    font-size: 1rem;
+}
+
+/* ---------- 关怀版 - 表单 ---------- */
+body.care-mode .form-group {
+    padding: 28px 26px;
+    border-radius: 10px;
+}
+body.care-mode .form-group label {
+    font-size: 1.15rem;
+    margin-bottom: 14px;
+}
+body.care-mode .form-group .form-hint {
+    font-size: 1rem;
+}
+body.care-mode .form-group select,
+body.care-mode .form-group input {
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    min-height: 52px;
+}
+body.care-mode .radio-group {
+    gap: 14px;
+}
+body.care-mode .radio-option {
+    padding: 14px 20px;
+    font-size: 1.08rem;
+    border-radius: 8px;
+    min-height: 52px;
+    min-width: auto;
+    flex: none;
+}
+
+/* ---------- 关怀版 - 方案结果 ---------- */
+body.care-mode .plan-section {
+    padding: 36px 32px;
+    border-radius: 12px;
+}
+body.care-mode .plan-section h4 {
+    font-size: 1.25rem;
+}
+body.care-mode .plan-steps li {
+    font-size: 1.1rem;
+    padding: 18px 0 18px 52px;
+    line-height: 2;
+}
+body.care-mode .plan-steps li::before {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    top: 16px;
+}
+body.care-mode .plan-tag {
+    font-size: 1rem;
+    padding: 8px 16px;
+}
+body.care-mode .plan-contacts li {
+    font-size: 1.1rem;
+    padding: 12px 0;
+}
+
+/* ---------- 关怀版 - 模板 ---------- */
+body.care-mode .filter-buttons {
+    gap: 14px;
+}
+body.care-mode .filter-btn {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    min-height: 48px;
+}
+body.care-mode .template-list {
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+body.care-mode .template-card {
+    padding: 32px 28px;
+    border-radius: 12px;
+}
+body.care-mode .template-card h4 {
+    font-size: 1.2rem;
+}
+body.care-mode .template-card p {
+    font-size: 1.02rem;
+}
+body.care-mode .template-card .tpl-category {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+}
+body.care-mode .template-card .tpl-icon {
+    font-size: 2rem;
+}
+body.care-mode .template-content {
+    font-size: 1.05rem;
+    line-height: 2.2;
+    padding: 24px;
+}
+body.care-mode .template-content * {
+    font-size: 18px !important;
+    line-height: 2.0 !important;
+}
+
+/* ---------- 关怀版 - 律师 ---------- */
+body.care-mode .lawyer-search-bar {
+    gap: 14px;
+}
+body.care-mode .search-input {
+    padding: 16px 22px;
+    font-size: 1.15rem;
+    min-height: 56px;
+    border-radius: 10px;
+}
+body.care-mode .search-select {
+    padding: 16px 36px 16px 18px;
+    font-size: 1.05rem;
+    min-height: 56px;
+    border-radius: 10px;
+}
+body.care-mode .lawyer-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+}
+body.care-mode .lawyer-card {
+    padding: 32px 28px;
+    border-radius: 12px;
+}
+body.care-mode .lawyer-name {
+    font-size: 1.25rem;
+}
+body.care-mode .lawyer-firm {
+    font-size: 1.05rem;
+}
+body.care-mode .lawyer-fields {
+    gap: 10px;
+}
+body.care-mode .lawyer-field-tag {
+    padding: 6px 14px;
+    font-size: 0.95rem;
+}
+body.care-mode .lawyer-cases {
+    font-size: 1.05rem;
+}
+body.care-mode .lawyer-contact {
+    font-size: 1.05rem;
+}
+body.care-mode .lawyer-badge {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+}
+body.care-mode .lawyer-card-hint {
+    font-size: 0.95rem;
+}
+body.care-mode .lawyer-photo-thumb {
+    width: 64px;
+    height: 84px;
+}
+body.care-mode .lawyer-photo-placeholder {
+    width: 64px;
+    height: 84px;
+    font-size: 1.6rem;
+}
+
+/* ---------- 关怀版 - 弹窗 ---------- */
+body.care-mode .lawyer-modal {
+    max-width: 90vw;
+    border-radius: 16px;
+}
+body.care-mode .lawyer-modal-close {
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
+    top: 12px;
+    right: 16px;
+}
+body.care-mode .modal-header {
+    padding: 48px 40px 32px;
+}
+body.care-mode .modal-name {
+    font-size: 1.6rem;
+}
+body.care-mode .modal-position {
+    font-size: 1.1rem;
+}
+body.care-mode .modal-firm {
+    font-size: 1.1rem;
+}
+body.care-mode .modal-body {
+    padding: 32px 40px;
+}
+body.care-mode .modal-section h4 {
+    font-size: 1.1rem;
+}
+body.care-mode .modal-info-row {
+    font-size: 1.05rem;
+    padding: 12px 0;
+}
+body.care-mode .modal-field-tag {
+    font-size: 1rem;
+    padding: 8px 16px;
+}
+body.care-mode .modal-cases {
+    font-size: 1.05rem;
+}
+body.care-mode .modal-photo {
+    width: 180px;
+    height: 250px;
+}
+body.care-mode .modal-photo-placeholder {
+    width: 180px;
+    height: 250px;
+    font-size: 4.5rem;
+}
+
+/* ---------- 关怀版 - FAQ ---------- */
+body.care-mode .faq-question {
+    font-size: 1.15rem;
+    padding: 22px 28px;
+    min-height: 56px;
+}
+body.care-mode .faq-answer p {
+    font-size: 1.08rem;
+    line-height: 2.2;
+}
+body.care-mode .faq-item.open .faq-answer {
+    padding: 0 28px 24px;
+}
+
+/* ---------- 关怀版 - 程序知识 ---------- */
+body.care-mode .procedure-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 600px;
+}
+body.care-mode .procedure-card {
+    padding: 32px 28px;
+    border-radius: 12px;
+}
+body.care-mode .procedure-card .proc-icon {
+    font-size: 2.2rem;
+}
+body.care-mode .procedure-card h4 {
+    font-size: 1.2rem;
+}
+body.care-mode .proc-body p {
+    font-size: 1.08rem;
+    line-height: 2;
+}
+body.care-mode .proc-tip {
+    font-size: 1.02rem;
+    padding: 12px 16px;
+    border-left-width: 5px;
+}
+
+/* ---------- 关怀版 - 费用计算器 ---------- */
+body.care-mode .calculator-box {
+    padding: 48px 36px;
+    border-radius: 14px;
+}
+body.care-mode .calc-label {
+    font-size: 1.2rem;
+}
+body.care-mode .calc-input {
+    font-size: 1.4rem;
+    padding: 16px 20px;
+    min-height: 56px;
+    width: 220px;
+}
+body.care-mode .calc-result {
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+body.care-mode .calc-result-label {
+    font-size: 1rem;
+}
+body.care-mode .calc-result-value {
+    font-size: 1.5rem;
+}
+body.care-mode .calc-note {
+    font-size: 0.95rem;
+}
+
+/* ---------- 关怀版 - 术语词典 ---------- */
+body.care-mode .glossary-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 600px;
+}
+body.care-mode .glossary-item {
+    padding: 28px 26px;
+    border-radius: 12px;
+}
+body.care-mode .glossary-item h4 {
+    font-size: 1.15rem;
+}
+body.care-mode .glossary-item p {
+    font-size: 1.05rem;
+}
+
+/* ---------- 关怀版 - 分页 ---------- */
+body.care-mode .page-btn {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    min-height: 48px;
+}
+body.care-mode .page-info {
+    font-size: 1.1rem;
+}
+
+/* ---------- 关怀版 - 免责声明 ---------- */
+body.care-mode .disclaimer-box {
+    padding: 32px 28px;
+    border-radius: 12px;
+}
+body.care-mode .disclaimer-box h4 {
+    font-size: 1.15rem;
+}
+body.care-mode .disclaimer-box p {
+    font-size: 1.05rem;
+    line-height: 2;
+}
+
+/* ---------- 关怀版 - 页脚 ---------- */
+body.care-mode .footer-text {
+    font-size: 1.05rem;
+}
+body.care-mode .footer-credit {
+    font-size: 0.95rem;
+}
+
+/* ---------- 关怀版 - 汉堡菜单适配 ---------- */
+@media (max-width: 900px) {
+    body.care-mode .nav-links a {
+        font-size: 1.3rem;
+    }
+}
+@media (max-width: 600px) {
+    body.care-mode .hero-title-main {
+        font-size: 2rem;
+    }
+}
+
+/* ---------- 关怀版 - 上传表单 ---------- */
+body.care-mode .upload-input {
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    min-height: 52px;
+}
+
+/* ---------- 关怀版 - 错误提示 ---------- */
+body.care-mode .error-hint p {
+    font-size: 1.1rem;
+}
+body.care-mode .error-banner h4 {
+    font-size: 1.25rem;
+}
+
+/* ---------- 关怀版 - 焦点样式增强 ---------- */
+body.care-mode :focus-visible {
+    outline: 4px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* ---------- 关怀版 - 律师总数提示 ---------- */
+body.care-mode .lawyer-count {
+    font-size: 1.1rem !important;
+}
+body.care-mode .loading-hint {
+    font-size: 1.15rem;
+}
+body.care-mode .no-results {
+    font-size: 1.15rem;
+}
+
+/* ============================================================ */
+/*  关怀版切换按钮                                                  */
+/* ============================================================ */
+.care-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 24px;
+    border: 2px solid var(--border);
+    background: #fff;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+}
+.care-mode-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+.care-mode-toggle .toggle-icon {
+    font-size: 1.2rem;
+    transition: transform var(--transition);
+}
+body.care-mode .care-mode-toggle {
+    border-color: #c0392b;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.06);
+    font-weight: 600;
+    font-size: 1.08rem;
+    padding: 12px 22px;
+    border-radius: 28px;
+}
+body.care-mode .care-mode-toggle .toggle-icon {
+    font-size: 1.5rem;
+}
+
+/* ============================================================ */
 /*  打印样式                                                      */
 /* ============================================================ */
 @media print {

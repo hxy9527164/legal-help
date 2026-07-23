@@ -214,7 +214,52 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
     // ============================================================
-    //  7. 初始状态
+    //  7. 关怀版切换
+    // ============================================================
+    var careToggle = document.getElementById('care-mode-toggle');
+    var CARE_MODE_KEY = 'legal_help_care_mode';
+
+    function enableCareMode() {
+        document.body.classList.add('care-mode');
+        if (careToggle) {
+            careToggle.querySelector('.toggle-icon').textContent = '🔍';
+            careToggle.innerHTML = careToggle.innerHTML.replace(/关怀版|标准版/, '标准版');
+            careToggle.title = '切换回标准版';
+        }
+        try { localStorage.setItem(CARE_MODE_KEY, '1'); } catch (e) {}
+    }
+
+    function disableCareMode() {
+        document.body.classList.remove('care-mode');
+        if (careToggle) {
+            careToggle.querySelector('.toggle-icon').textContent = '🔍';
+            careToggle.innerHTML = careToggle.innerHTML.replace(/关怀版|标准版/, '关怀版');
+            careToggle.title = '切换大字关怀版，更适合老年人阅读';
+        }
+        try { localStorage.removeItem(CARE_MODE_KEY); } catch (e) {}
+    }
+
+    if (careToggle) {
+        careToggle.addEventListener('click', function () {
+            if (document.body.classList.contains('care-mode')) {
+                disableCareMode();
+            } else {
+                enableCareMode();
+            }
+        });
+    }
+
+    // 页面加载时恢复用户偏好
+    (function restoreCareMode() {
+        try {
+            if (localStorage.getItem(CARE_MODE_KEY) === '1') {
+                enableCareMode();
+            }
+        } catch (e) {}
+    })();
+
+    // ============================================================
+    //  8. 初始状态
     // ============================================================
     updateNavOnScroll();
 
