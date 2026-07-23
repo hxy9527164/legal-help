@@ -1796,6 +1796,31 @@ input:focus-visible {
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
+/* 取消生成按钮 */
+#ai-cancel-footer {
+    margin-bottom: 0;
+}
+#ai-stop-btn {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #fff;
+    color: #c97a6a;
+    border: 1px solid rgba(201, 122, 106, 0.4);
+    transition: all var(--transition);
+    font-family: inherit;
+}
+#ai-stop-btn:hover {
+    background: #fef8f6;
+    border-color: #c97a6a;
+}
+body.care-mode #ai-stop-btn {
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    min-height: 48px;
+}
 
 /* 提示 */
 .ai-disclaimer {

@@ -187,7 +187,7 @@
         // 绑定展开/收起原文事件
         provisionGrid.querySelectorAll('.prov-expand-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                var pid = parseInt(this.getAttribute('data-pid'));
+                var pid = parseInt(this.getAttribute('data-pid'), 10);
                 var origDiv = document.getElementById('prov-orig-' + pid);
                 var prov = provisionsData.find(function (p) { return p.id === pid; });
                 if (!prov) return;
@@ -205,7 +205,7 @@
         // 绑定AI解释事件
         provisionGrid.querySelectorAll('.ai-explain-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                var pid = parseInt(this.getAttribute('data-pid'));
+                var pid = parseInt(this.getAttribute('data-pid'), 10);
                 var prov = provisionsData.find(function (p) { return p.id === pid; });
                 if (!prov) return;
                 aiExplain(prov, this);
@@ -231,7 +231,7 @@
             btn.disabled = false;
             btn.textContent = '🤖 AI 换个说法解释';
             if (error) {
-                explainDiv.innerHTML = '<span style="color:#c97a6a;">⚠️ AI解释失败：' + error + '。请检查网络后重试。</span>';
+                explainDiv.innerHTML = '<span style="color:#c97a6a;">⚠️ AI解释失败：' + escapeHTML(error) + '。请检查网络后重试。</span>';
             } else if (result) {
                 explainDiv.textContent = result;
             }

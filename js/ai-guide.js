@@ -9,7 +9,7 @@
     var API_URL = 'https://api.siliconflow.cn/v1/chat/completions';
 
     // DOM
-    var caseInput, analyzeBtn, outputArea, outputFooter, keyModal, keyInput, keySaveBtn, copyBtn;
+    var caseInput, analyzeBtn, outputArea, outputFooter, cancelFooter, keyModal, keyInput, keySaveBtn, copyBtn, resetBtn, stopBtn;
     var isGenerating = false;
     var abortController = null;
 
@@ -61,6 +61,9 @@
         keySaveBtn = document.getElementById('ai-key-save');
         copyBtn = document.getElementById('ai-copy-btn');
         outputFooter = document.getElementById('ai-output-footer');
+        cancelFooter = document.getElementById('ai-cancel-footer');
+        resetBtn = document.getElementById('ai-reset-btn');
+        stopBtn = document.getElementById('ai-stop-btn');
 
         // 恢复已保存的API Key
         try {
@@ -80,6 +83,8 @@
         if (analyzeBtn) analyzeBtn.addEventListener('click', handleAnalyze);
         if (keySaveBtn) keySaveBtn.addEventListener('click', saveApiKey);
         if (copyBtn) copyBtn.addEventListener('click', copyOutput);
+        if (resetBtn) resetBtn.addEventListener('click', resetForm);
+        if (stopBtn) stopBtn.addEventListener('click', stopGeneration);
 
         // 关闭Key弹窗
         if (keyModal) {
@@ -120,6 +125,35 @@
     }
 
     // ============================================================
+    //  停止生成
+    // ============================================================
+    function stopGeneration() {
+        if (abortController) {
+            abortController.abort();
+            abortController = null;
+        }
+    }
+
+    // ============================================================
+    //  重置表单
+    // ============================================================
+    function resetForm() {
+        if (caseInput) caseInput.value = '';
+        if (outputArea) {
+            outputArea.style.display = 'none';
+            outputArea.innerHTML = '';
+        }
+        if (outputFooter) outputFooter.style.display = 'none';
+        if (cancelFooter) cancelFooter.style.display = 'none';
+        if (copyBtn) copyBtn.style.display = 'none';
+        if (analyzeBtn) {
+            analyzeBtn.disabled = false;
+            analyzeBtn.textContent = '🚀 开始分析';
+        }
+        isGenerating = false;
+    }
+
+    // ============================================================
     //  开始分析
     // ============================================================
     function handleAnalyze() {
@@ -156,6 +190,9 @@
 
         isGenerating = true;
 
+        // 显示取消按钮
+        if (cancelFooter) cancelFooter.style.display = 'flex';
+
         // 使用 AbortController 支持取消
         abortController = new AbortController();
 
@@ -172,14 +209,17 @@
                 var contentDiv = document.getElementById('ai-output-content');
                 if (contentDiv) {
                     contentDiv.textContent += chunk;
-                    // 自动滚动到底部
-                    contentDiv.scrollTop = contentDiv.scrollHeight;
+                    // 用 requestAnimationFrame 确保DOM更新后再滚动
+                    requestAnimationFrame(function () {
+                        contentDiv.scrollTop = contentDiv.scrollHeight;
+                    });
                 }
             },
             function (error) {
                 // 完成/出错
                 isGenerating = false;
                 abortController = null;
+                if (cancelFooter) cancelFooter.style.display = 'none';
                 if (analyzeBtn) {
                     analyzeBtn.disabled = false;
                     analyzeBtn.textContent = '🚀 开始分析';

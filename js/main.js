@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinksEl = document.querySelector('.nav-links');
     const navAnchors = document.querySelectorAll('.nav-links a');
     const entryCards = document.querySelectorAll('.entry-card');
-    const heroSection = document.getElementById('home');
     const allSections = document.querySelectorAll('section[id]');
     var currentSection = 'home';
 
@@ -102,11 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 移除旧的滚动监听，改为hash监听已经覆盖
-    // 保留汉堡菜单逻辑
-
     // ============================================================
-    //  3. 汉堡菜单
+    //  6. 汉堡菜单
     // ============================================================
     hamburger.addEventListener('click', function () {
         this.classList.toggle('active');
@@ -121,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================================
-    //  5. 诉讼费计算器
+    //  7. 诉讼费计算器
     // ============================================================
     var calcAmount = document.getElementById('calc-amount');
     var calcBtn = document.getElementById('calc-btn');
@@ -169,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ============================================================
-    //  6. 法律术语词典渲染
+    //  8. 法律术语词典渲染
     // ============================================================
     (function renderGlossary() {
         var glossaryGrid = document.getElementById('glossary-grid');
@@ -199,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
     // ============================================================
-    //  7. 关怀版切换
+    //  9. 关怀版切换
     // ============================================================
     var careToggle = document.getElementById('care-mode-toggle');
     var CARE_MODE_KEY = 'legal_help_care_mode';
@@ -207,8 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableCareMode() {
         document.body.classList.add('care-mode');
         if (careToggle) {
-            careToggle.querySelector('.toggle-icon').textContent = '🔍';
-            careToggle.innerHTML = careToggle.innerHTML.replace(/关怀版|标准版/, '标准版');
+            var labelSpan = careToggle.querySelector('.toggle-label');
+            if (labelSpan) labelSpan.textContent = '标准版';
             careToggle.title = '切换回标准版';
         }
         try { localStorage.setItem(CARE_MODE_KEY, '1'); } catch (e) {}
@@ -217,8 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function disableCareMode() {
         document.body.classList.remove('care-mode');
         if (careToggle) {
-            careToggle.querySelector('.toggle-icon').textContent = '🔍';
-            careToggle.innerHTML = careToggle.innerHTML.replace(/关怀版|标准版/, '关怀版');
+            var labelSpan = careToggle.querySelector('.toggle-label');
+            if (labelSpan) labelSpan.textContent = '关怀版';
             careToggle.title = '切换大字关怀版，更适合老年人阅读';
         }
         try { localStorage.removeItem(CARE_MODE_KEY); } catch (e) {}
@@ -244,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
     // ============================================================
-    //  8. 滚动监听（导航栏阴影）
+    //  10. 滚动监听（导航栏阴影）
     // ============================================================
     function updateNavOnScroll() {
         if (currentSection === 'home') {
