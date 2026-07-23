@@ -996,95 +996,117 @@ function closeModal() {
 }
 
 // ==================== WIZARD ====================
+function showError(msg) {
+  var d = document.getElementById('diag-status');
+  if (d) { d.textContent = '❌ ' + msg; d.style.background = '#c0392b'; d.style.display = 'block'; }
+  console.error(msg);
+}
+
 function initWizard() {
-  if (!knowledgeBase) return;
+  if (!knowledgeBase) { showError('知识库未加载'); return; }
   wizardState = { category: null, scenario: null, answers: {} };
   switchWizPanel(1);
   renderCategoryCards();
 }
 
 function renderCategoryCards() {
-  const grid = $('#categoryGrid');
-  if (!grid || !knowledgeBase) return;
-  const cats = knowledgeBase.categories;
-  grid.innerHTML = Object.values(cats).map(c => `
-    <div class="category-card" data-cat-id="${c.id}" onclick="selectWizCategory('${c.id}')">
-      <div class="cat-icon">${c.icon}</div>
-      <div class="cat-name">${c.name}</div>
-      <div class="cat-desc">${c.description}</div>
-    </div>
-  `).join('');
+  var grid = document.getElementById('categoryGrid');
+  if (!grid || !knowledgeBase) { showError('categoryGrid元素或知识库缺失'); return; }
+  var cats = knowledgeBase.categories;
+  var catList = Object.values(cats);
+  if (!catList.length) { showError('知识库分类为空'); return; }
+  var html = '';
+  for (var i = 0; i < catList.length; i++) {
+    var c = catList[i];
+    html += '<div class="category-card" data-cat-id="' + c.id + '" onclick="selectWizCategory(\'' + c.id + '\')">';
+    html += '<div class="cat-icon">' + c.icon + '</div>';
+    html += '<div class="cat-name">' + c.name + '</div>';
+    html += '<div class="cat-desc">' + c.description + '</div>';
+    html += '</div>';
+  }
+  grid.innerHTML = html;
 }
 
 function selectWizCategory(catId) {
-  wizardState.category = knowledgeBase.categories[catId];
-  wizardState.scenario = null;
-  wizardState.answers = {};
-  renderScenarioCards();
-  switchWizPanel(2);
+  try {
+    wizardState.category = knowledgeBase.categories[catId];
+    if (!wizardState.category) { showError('未找到分类: ' + catId); return; }
+    wizardState.scenario = null;
+    wizardState.answers = {};
+    renderScenarioCards();
+    switchWizPanel(2);
+  } catch(e) { showError('selectWizCategory错误: ' + e.message); }
 }
 
 function renderScenarioCards() {
-  const cat = wizardState.category;
+  var cat = wizardState.category;
   if (!cat) return;
-  $('#wizScenarioTitle').textContent = cat.icon + ' ' + cat.name + ' — 请选择场景';
-  $('#scenarioList').innerHTML = cat.scenarios.map(s => `
-    <div class="scenario-item" onclick="selectWizScenario('${s.id}')">
-      <div class="si-icon">📋</div>
-      <div class="si-info">
-        <div class="si-name">${s.name}</div>
-        <div class="si-desc">${s.description}</div>
-      </div>
-      <div class="si-arrow">→</div>
-    </div>
-  `).join('');
+  var titleEl = document.getElementById('wizScenarioTitle');
+  if (titleEl) titleEl.textContent = cat.icon + ' ' + cat.name + ' — 请选择场景';
+  var listEl = document.getElementById('scenarioList');
+  if (!listEl) return;
+  var html = '';
+  for (var i = 0; i < cat.scenarios.length; i++) {
+    var s = cat.scenarios[i];
+    html += '<div class="scenario-item" onclick="selectWizScenario(\'' + s.id + '\')">';
+    html += '<div class="si-icon">📋</div>';
+    html += '<div class="si-info"><div class="si-name">' + s.name + '</div><div class="si-desc">' + s.description + '</div></div>';
+    html += '<div class="si-arrow">→</div></div>';
+  }
+  listEl.innerHTML = html;
 }
 
 function selectWizScenario(scenarioId) {
-  wizardState.scenario = wizardState.category.scenarios.find(s => s.id === scenarioId);
-  wizardState.answers = {};
-  renderQuestions();
-  switchWizPanel(3);
+  try {
+    var scenarios = wizardState.category.scenarios;
+    for (var i = 0; i < scenarios.length; i++) {
+      if (scenarios[i].id === scenarioId) { wizardState.scenario = scenarios[i]; break; }
+    }
+    if (!wizardState.scenario) { showError('未找到场景: ' + scenarioId); return; }
+    wizardState.answers = {};
+    renderQuestions();
+    switchWizPanel(3);
+  } catch(e) { showError('selectWizScenario错误: ' + e.message); }
 }
 
 function renderQuestions() {
-  const sc = wizardState.scenario;
+  var sc = wizardState.scenario;
   if (!sc) return;
-  $('#wizQuestionTitle').textContent = sc.name + ' — 请回答以下问题';
-  $('#questionForm').innerHTML = sc.questions.map((q, qi) => `
-    <div class="question-block" id="qBlock${qi}">
-      <label class="q-label">${q.label}</label>
-      <div class="option-group">
-        ${q.options.map((opt, oi) => `
-          <div class="option-item" id="q${qi}o${oi}" onclick="selectOption('${q.id}','${qi}',${oi},'${q.type}','${escapeAttr(opt)}')">
-            <div class="oi-radio"></div>
-            <span>${opt}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `).join('');
+  var titleEl = document.getElementById('wizQuestionTitle');
+  if (titleEl) titleEl.textContent = sc.name + ' — 请回答以下问题';
+  var formEl = document.getElementById('questionForm');
+  if (!formEl) return;
+  var html = '';
+  for (var qi = 0; qi < sc.questions.length; qi++) {
+    var q = sc.questions[qi];
+    html += '<div class="question-block" id="qBlock' + qi + '"><label class="q-label">' + q.label + '</label><div class="option-group">';
+    for (var oi = 0; oi < q.options.length; oi++) {
+      var opt = q.options[oi];
+      var escapedOpt = opt.replace(/'/g, "\\'");
+      html += '<div class="option-item" id="q' + qi + 'o' + oi + '" onclick="selectOption(\'' + q.id + '\',\'' + qi + '\',' + oi + ',\'' + q.type + '\',\'' + escapedOpt + '\')"><div class="oi-radio"></div><span>' + opt + '</span></div>';
+    }
+    html += '</div></div>';
+  }
+  formEl.innerHTML = html;
 }
 
-function escapeAttr(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
-
 function selectOption(qId, qi, oi, type, value) {
+  var block = document.getElementById('qBlock' + qi);
+  if (!block) return;
   if (type === 'radio') {
-    const items = document.querySelectorAll(`#qBlock${qi} .option-item`);
-    items.forEach(it => it.classList.remove('selected'));
-    const target = document.getElementById(`q${qi}o${oi}`);
+    var items = block.querySelectorAll('.option-item');
+    for (var k = 0; k < items.length; k++) { items[k].classList.remove('selected'); }
+    var target = document.getElementById('q' + qi + 'o' + oi);
     if (target) target.classList.add('selected');
     wizardState.answers[qId] = value;
   } else if (type === 'checkbox') {
-    const target = document.getElementById(`q${qi}o${oi}`);
+    var target = document.getElementById('q' + qi + 'o' + oi);
     if (target) target.classList.toggle('selected');
     if (!wizardState.answers[qId]) wizardState.answers[qId] = [];
-    const arr = wizardState.answers[qId];
-    if (arr.includes(value)) {
-      arr.splice(arr.indexOf(value), 1);
-    } else {
-      arr.push(value);
-    }
+    var arr = wizardState.answers[qId];
+    var idx = arr.indexOf(value);
+    if (idx >= 0) { arr.splice(idx, 1); }
+    else { arr.push(value); }
   }
 }
 
