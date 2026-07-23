@@ -177,7 +177,7 @@
                 '</div>' +
                 '<div class="prov-explanation-wrapper">' +
                     '<div class="prov-explain-label">💡 大白话解释</div>' +
-                    '<div class="prov-explain-text" id="prov-explain-' + p.id + '">' + p.explanation + '</div>' +
+                    '<div class="prov-explain-text" id="prov-explain-' + p.id + '">' + escapeHTML(p.explanation) + '</div>' +
                     '<button class="ai-explain-btn" data-pid="' + p.id + '">🤖 AI 换个说法解释</button>' +
                 '</div>';
 

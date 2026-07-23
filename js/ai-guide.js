@@ -365,6 +365,9 @@
                 continue;
             }
 
+            // 先转义HTML，再处理Markdown
+            line = escapeHTML(line);
+
             // **粗体**
             line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
