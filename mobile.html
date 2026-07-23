@@ -809,41 +809,42 @@ async function loadJSON(path) {
 }
 
 async function loadAllData() {
-  const results = await Promise.allSettled([
-    loadJSON('data/knowledge-base.json'),
-    loadJSON('data/lawyers.json'),
-    loadJSON('data/templates.json'),
-    loadJSON('data/legal-provisions-data.js')
+  // 1. IMMEDIATELY use built-in default data (no network wait)
+  knowledgeBase = getDefaultKnowledgeBase();
+  lawyersData = getDefaultLawyers();
+  templatesData = getDefaultTemplates();
+  provisionsData = getDefaultProvisions();
+
+  // 2. Try fetching remote data with SHORT timeout (don't block)
+  const fetchWithTimeout = async (path, timeoutMs = 5000) => {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      const resp = await fetch(DATA_BASE + path, { signal: controller.signal });
+      clearTimeout(timer);
+      if (resp.ok) return await resp.json();
+    } catch(e) {}
+    try {
+      const controller2 = new AbortController();
+      const timer2 = setTimeout(() => controller2.abort(), 5000);
+      const resp2 = await fetch('https://hxy9527164.github.io/legal-help/' + path, { signal: controller2.signal });
+      clearTimeout(timer2);
+      if (resp2.ok) return await resp2.json();
+    } catch(e) {}
+    return null;
+  };
+
+  // Fire all remote fetches concurrently with short timeout
+  const [kb, lawyers, templates] = await Promise.allSettled([
+    fetchWithTimeout('data/knowledge-base.json', 5000),
+    fetchWithTimeout('data/lawyers.json', 5000),
+    fetchWithTimeout('data/templates.json', 5000)
   ]);
 
-  knowledgeBase = results[0].value;
-  lawyersData = results[1].value || [];
-  templatesData = results[2].value || [];
-
-  // Handle provisions (might be JS file)
-  if (results[3].value) {
-    provisionsData = Array.isArray(results[3].value) ? results[3].value : [];
-  } else {
-    // Try loading provisions differently
-    try {
-      const resp = await fetch(DATA_BASE + 'data/legal-provisions-data.js');
-      const text = await resp.text();
-      const match = text.match(/window\.__legalProvisionsData\s*=\s*(\[[\s\S]*\])\s*;?/);
-      if (match) {
-        provisionsData = JSON.parse(match[1]);
-      }
-    } catch(e) { provisionsData = []; }
-  }
-
-  if (!knowledgeBase) {
-    knowledgeBase = getDefaultKnowledgeBase();
-  }
-  if (!lawyersData.length) {
-    lawyersData = getDefaultLawyers();
-  }
-  if (!templatesData.length) {
-    templatesData = getDefaultTemplates();
-  }
+  // Upgrade with remote data if available
+  if (kb.value) knowledgeBase = kb.value;
+  if (lawyers.value) lawyersData = lawyers.value;
+  if (templates.value) templatesData = templates.value;
 
   return true;
 }
