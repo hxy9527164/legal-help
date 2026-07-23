@@ -1632,6 +1632,10 @@ input:focus-visible {
     .glossary-grid { grid-template-columns: 1fr; }
     .calc-result { grid-template-columns: 1fr; }
     .nav-links { gap: 16px; }
+    .ai-guide-container { max-width: 100%; }
+    .ai-input-area { padding: 24px 18px; }
+    .ai-output-area { padding: 24px 18px; }
+    .ai-output-content { max-height: 55vh; }
 }
 
 @media (max-width: 600px) {
@@ -1736,8 +1740,10 @@ input:focus-visible {
     line-height: 1.9;
     font-size: 0.92rem;
     color: var(--text);
-    max-height: none;
-    overflow-y: visible;
+    max-height: 70vh;
+    overflow-y: auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .ai-output-content p {
@@ -2510,6 +2516,7 @@ body.care-mode .ai-output-area {
 body.care-mode .ai-output-content {
     font-size: 1.15rem;
     line-height: 2.2;
+    max-height: 60vh;
 }
 body.care-mode .ai-step-title {
     font-size: 1.4rem;

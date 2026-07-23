@@ -184,16 +184,15 @@
                     analyzeBtn.disabled = false;
                     analyzeBtn.textContent = '🚀 开始分析';
                 }
-                if (copyBtn && outputArea && outputArea.textContent) {
-                    copyBtn.style.display = 'inline-block';
-                }
 
                 if (error) {
-                    var contentDiv2 = document.getElementById('ai-output-content');
-                    if (contentDiv2) {
-                        contentDiv2.innerHTML += '\n\n---\n⚠️ ' + error;
-                    } else if (outputArea) {
-                        outputArea.innerHTML = '<p style="color:#c97a6a;">⚠️ ' + error + '</p>';
+                    // 错误：追加错误信息到已有输出，或单独显示
+                    var existingContent = document.getElementById('ai-output-content');
+                    if (existingContent) {
+                        existingContent.innerHTML += '\n\n---\n<span style="color:#c97a6a;">⚠️ ' + escapeHTML(error) + '</span>';
+                        if (copyBtn) copyBtn.style.display = 'inline-block';
+                    } else {
+                        outputArea.innerHTML = '<div class="ai-output-content"><p style="color:#c97a6a;">⚠️ ' + escapeHTML(error) + '</p></div>';
                     }
                     if (outputFooter) outputFooter.style.display = 'flex';
                 } else {
@@ -218,51 +217,40 @@
 
         var lastIndex = 0;
         var buffer = '';
+        var streamedSomething = false;  // 追踪是否已有流式输出
 
         xhr.onprogress = function () {
-            var newData = xhr.responseText.substring(lastIndex);
+            parseStreamChunk(xhr.responseText.substring(lastIndex));
             lastIndex = xhr.responseText.length;
-
-            buffer += newData;
-            var lines = buffer.split('\n');
-            // 保留最后一个可能不完整的行
-            buffer = lines.pop() || '';
-
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
-                if (!line || !line.startsWith('data: ')) continue;
-
-                var dataStr = line.substring(6);
-                if (dataStr === '[DONE]') continue;
-
-                try {
-                    var data = JSON.parse(dataStr);
-                    var delta = data.choices && data.choices[0] && data.choices[0].delta;
-                    if (delta && delta.content) {
-                        onChunk(delta.content);
-                    }
-                } catch (e) {
-                    // 跳过解析失败的行
-                }
-            }
         };
 
         xhr.onload = function () {
+            // 兜底：如果 onprogress 没触发（某些浏览器），从完整响应解析
+            var remaining = xhr.responseText.substring(lastIndex);
+            if (remaining) parseStreamChunk(remaining);
+
             // 处理剩余buffer
             if (buffer.trim()) {
                 var remainingLines = buffer.split('\n');
                 for (var i = 0; i < remainingLines.length; i++) {
-                    var line = remainingLines[i].trim();
-                    if (!line || !line.startsWith('data: ') || line.indexOf('[DONE]') > -1) continue;
-                    try {
-                        var data = JSON.parse(line.substring(6));
-                        var delta = data.choices && data.choices[0] && data.choices[0].delta;
-                        if (delta && delta.content) onChunk(delta.content);
-                    } catch (e) {}
+                    parseSSELine(remainingLines[i]);
                 }
             }
 
             if (xhr.status === 200) {
+                if (!streamedSomething) {
+                    // 非流式响应兜底：尝试解析为普通JSON
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        var text = data.choices && data.choices[0] && data.choices[0].message
+                            ? data.choices[0].message.content
+                            : '';
+                        if (text) {
+                            onChunk(text);
+                            streamedSomething = true;
+                        }
+                    } catch (e) {}
+                }
                 onDone(null);
             } else {
                 var errMsg = '请求失败 (HTTP ' + xhr.status + ')';
@@ -273,6 +261,35 @@
                 onDone(errMsg);
             }
         };
+
+        function parseStreamChunk(newData) {
+            if (!newData) return;
+            buffer += newData;
+            var lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+            for (var i = 0; i < lines.length; i++) {
+                parseSSELine(lines[i]);
+            }
+        }
+
+        function parseSSELine(line) {
+            var trimmed = line.trim();
+            if (!trimmed || !trimmed.startsWith('data: ')) return;
+
+            var dataStr = trimmed.substring(6);
+            if (dataStr === '[DONE]') return;
+
+            try {
+                var data = JSON.parse(dataStr);
+                var delta = data.choices && data.choices[0] && data.choices[0].delta;
+                if (delta && delta.content) {
+                    onChunk(delta.content);
+                    streamedSomething = true;
+                }
+            } catch (e) {
+                // 跳过解析失败的行
+            }
+        }
 
         xhr.onerror = function () {
             if (signal && signal.aborted) {
@@ -306,9 +323,14 @@
     // ============================================================
     function finalizeOutput() {
         var contentDiv = document.getElementById('ai-output-content');
-        if (!contentDiv) return;
+        var rawText = contentDiv ? (contentDiv.textContent || '') : '';
 
-        var rawText = contentDiv.textContent || '';
+        // 空响应降级
+        if (!contentDiv || rawText.trim().length < 10) {
+            outputArea.innerHTML = '<div class="ai-output-content"><p style="color:var(--text-secondary);text-align:center;padding:40px;">AI 未返回有效内容，请尝试更详细地描述你的问题后重试。</p></div>';
+            if (outputFooter) outputFooter.style.display = 'flex';
+            return;
+        }
 
         // 将Markdown转换为结构化HTML
         var html = markdownToHTML(rawText);

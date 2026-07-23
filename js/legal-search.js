@@ -164,7 +164,6 @@
 
             var catName = catConfig[p.category] || p.category;
             var truncatedOriginal = p.original.length > 200 ? p.original.substring(0, 200) + '...' : p.original;
-            var fullOriginal = p.original;
 
             card.innerHTML =
                 '<div class="prov-header">' +
@@ -254,6 +253,7 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('Authorization', 'Bearer ' + apiKey);
         xhr.timeout = 30000;
+        xhr.responseType = 'text';
 
         xhr.onload = function () {
             if (xhr.status === 200) {
@@ -262,10 +262,13 @@
                     var text = data.choices && data.choices[0] && data.choices[0].message
                         ? data.choices[0].message.content
                         : '';
-                    callback(null, text.trim());
+                    callback(null, (text || '').trim());
                 } catch (e) {
                     callback('解析响应失败', null);
                 }
+            } else if (xhr.status === 0) {
+                // file:// 或其他导致 status=0 的场景
+                callback('请求被阻止（可能是跨域或file协议限制）', null);
             } else {
                 var errMsg = 'HTTP ' + xhr.status;
                 try {
@@ -276,8 +279,8 @@
             }
         };
 
-        xhr.onerror = function () { callback('网络连接失败', null); };
-        xhr.ontimeout = function () { callback('请求超时', null); };
+        xhr.onerror = function () { callback('网络连接失败，请检查网络', null); };
+        xhr.ontimeout = function () { callback('请求超时（30秒），请重试', null); };
 
         xhr.send(JSON.stringify({
             model: 'deepseek-ai/DeepSeek-V3',
