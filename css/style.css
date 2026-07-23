@@ -1663,6 +1663,319 @@ input:focus-visible {
 }
 
 /* ============================================================ */
+/*  AI维权指导                                                      */
+/* ============================================================ */
+.ai-guide-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.ai-input-area {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 30px;
+    margin-bottom: 28px;
+}
+
+.ai-input-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--text);
+    letter-spacing: 0.3px;
+}
+
+.ai-case-textarea {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 8px;
+    background: #fafaf8;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    font-size: 0.92rem;
+    font-family: inherit;
+    line-height: 1.8;
+    resize: vertical;
+    transition: border-color var(--transition);
+}
+.ai-case-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.ai-case-textarea::placeholder {
+    color: #bbb;
+    font-weight: 300;
+}
+
+.ai-input-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.ai-input-hint {
+    font-size: 0.78rem;
+    color: #ccc;
+    font-weight: 300;
+}
+
+/* 输出区 */
+.ai-output-area {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    margin-bottom: 20px;
+}
+
+.ai-output-content {
+    line-height: 1.9;
+    font-size: 0.92rem;
+    color: var(--text);
+    max-height: none;
+    overflow-y: visible;
+}
+
+.ai-output-content p {
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    font-weight: 300;
+}
+.ai-output-content strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* AI 章节标题 */
+.ai-step-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    letter-spacing: 0.3px;
+}
+.ai-step-title:first-child {
+    margin-top: 0;
+}
+
+/* AI 列表 */
+.ai-numbered-list,
+.ai-bullet-list {
+    margin: 12px 0 20px;
+    padding-left: 24px;
+    color: var(--text-secondary);
+}
+.ai-numbered-list li,
+.ai-bullet-list li {
+    padding: 6px 0;
+    line-height: 1.8;
+    font-weight: 300;
+}
+.ai-numbered-list li strong,
+.ai-bullet-list li strong {
+    color: var(--text);
+}
+
+/* 输出区底部 */
+.ai-output-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* 提示 */
+.ai-disclaimer {
+    text-align: center;
+    padding: 20px 0;
+}
+.ai-disclaimer p {
+    font-size: 0.78rem;
+    color: #ccc;
+    font-weight: 300;
+    margin-bottom: 4px;
+}
+.ai-disclaimer a {
+    color: var(--accent);
+    cursor: pointer;
+}
+
+/* AI打字机动画 */
+.ai-typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+    justify-content: center;
+}
+.ai-typing-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: typingBounce 1.4s ease-in-out infinite;
+}
+.ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+.ai-typing-label {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-left: 6px;
+}
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================ */
+/*  法律条文知识库                                                  */
+/* ============================================================ */
+.legal-db-container {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.legal-search-bar {
+    max-width: 600px;
+    margin: 0 auto 20px;
+}
+.legal-search-bar .search-input {
+    width: 100%;
+}
+
+.provision-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* 条文卡片 */
+.provision-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 26px;
+    transition: all var(--transition);
+}
+.provision-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.prov-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.prov-category-tag {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: #f5f5f5;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.prov-law-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.3px;
+}
+
+/* 法条原文区 */
+.prov-original-wrapper {
+    background: #fafaf8;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+.prov-original-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.prov-original-text {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+    font-weight: 300;
+}
+.prov-expand-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 4px 0;
+    font-family: inherit;
+    transition: color var(--transition);
+}
+.prov-expand-btn:hover {
+    color: #8b6d4a;
+}
+
+/* 白话解释区 */
+.prov-explanation-wrapper {
+    padding: 4px 0;
+}
+.prov-explain-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #6a9b7a;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.prov-explain-text {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.ai-explain-btn {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--accent);
+    background: #fff;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all var(--transition);
+}
+.ai-explain-btn:hover {
+    background: var(--accent-dim);
+    color: #8b6d4a;
+}
+.ai-explain-btn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+/* ============================================================ */
 /*  关怀版模式 — 专为老年用户设计                                    */
 /*  大字 大按钮 高对比度 简洁布局 暖色调                              */
 /* ============================================================ */
@@ -2175,6 +2488,91 @@ body.care-mode .footer-text {
 }
 body.care-mode .footer-credit {
     font-size: 0.95rem;
+}
+
+/* ---------- 关怀版 - AI维权指导 ---------- */
+body.care-mode .ai-input-label {
+    font-size: 1.3rem;
+}
+body.care-mode .ai-case-textarea {
+    font-size: 1.15rem;
+    padding: 22px 24px;
+    line-height: 2.2;
+    border-radius: 10px;
+}
+body.care-mode .ai-input-hint {
+    font-size: 1rem;
+}
+body.care-mode .ai-output-area {
+    padding: 40px 36px;
+    border-radius: 12px;
+}
+body.care-mode .ai-output-content {
+    font-size: 1.15rem;
+    line-height: 2.2;
+}
+body.care-mode .ai-step-title {
+    font-size: 1.4rem;
+    margin: 36px 0 18px;
+}
+body.care-mode .ai-numbered-list li,
+body.care-mode .ai-bullet-list li {
+    font-size: 1.1rem;
+    padding: 10px 0;
+    line-height: 2.1;
+}
+body.care-mode .ai-disclaimer p {
+    font-size: 1rem;
+}
+body.care-mode .ai-typing-label {
+    font-size: 1.1rem;
+}
+body.care-mode .ai-typing-dot {
+    width: 14px;
+    height: 14px;
+}
+
+/* ---------- 关怀版 - 法律条文库 ---------- */
+body.care-mode .prov-law-name {
+    font-size: 1.2rem;
+}
+body.care-mode .prov-category-tag {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+}
+body.care-mode .prov-original-label {
+    font-size: 0.95rem;
+}
+body.care-mode .prov-original-text {
+    font-size: 1.08rem;
+    line-height: 2.1;
+}
+body.care-mode .prov-expand-btn {
+    font-size: 1rem;
+}
+body.care-mode .prov-explain-label {
+    font-size: 0.95rem;
+}
+body.care-mode .prov-explain-text {
+    font-size: 1.1rem;
+    line-height: 2.1;
+}
+body.care-mode .ai-explain-btn {
+    font-size: 1rem;
+    padding: 10px 22px;
+    border-radius: 20px;
+    min-height: 44px;
+}
+body.care-mode .provision-card {
+    padding: 32px 28px;
+    border-radius: 12px;
+}
+body.care-mode .prov-original-wrapper {
+    padding: 22px 22px;
+    border-radius: 10px;
+}
+body.care-mode .provision-grid {
+    gap: 22px;
 }
 
 /* ---------- 关怀版 - 汉堡菜单适配 ---------- */

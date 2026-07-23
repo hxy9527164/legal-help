@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var v="202607231055";if(location.search.indexOf(v)===-1&&location.hostname){location.search="?v="+v}})()</script>
+    <script>(function(){var v="202607231130";if(location.search.indexOf(v)===-1&&location.hostname){location.search="?v="+v}})()</script>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>法律自助助手 - 遇到问题，三步找到解决方案</title>
-    <link rel="stylesheet" href="css/style.css?v=202607231055c">
+    <link rel="stylesheet" href="css/style.css?v=202607231130c">
 </head>
 <body>
 
@@ -26,6 +26,8 @@
                 <a href="#procedure-section">诉讼指南</a>
                 <a href="#calculator-section">费用计算</a>
                 <a href="#faq-section">常见问题</a>
+                <a href="#ai-guide-section">🤖 AI维权</a>
+                <a href="#legal-db-section">📚 法律条文</a>
             </nav>
             <button class="care-mode-toggle" id="care-mode-toggle" aria-label="切换关怀版" title="切换大字关怀版，更适合老年人阅读">
                 <span class="toggle-icon">🔍</span> 关怀版
@@ -398,6 +400,105 @@
     </div>
 
     <!-- ============================================================ -->
+    <!-- AI维权指导 -->
+    <!-- ============================================================ -->
+    <section class="ai-guide-section section" id="ai-guide-section">
+        <div class="container">
+            <button class="back-home" onclick="document.querySelector('.nav-logo').click()">← 返回首页</button>
+            <h2 class="section-title">🤖 AI 维权指导</h2>
+            <p class="section-subtitle">用大白话描述你遇到的法律问题，AI帮你一步步分析该怎么维权</p>
+
+            <div class="ai-guide-container">
+                <!-- 输入区 -->
+                <div class="ai-input-area">
+                    <label class="ai-input-label" for="ai-case-input">📝 请描述你的情况：</label>
+                    <textarea id="ai-case-input" class="ai-case-textarea" placeholder="例如：我在XX超市买到了一包过期的饼干，吃完了才发现已经过期两个月了。我找超市要求赔偿，他们说给我换一包新的，我觉得不合理。我应该怎么办？&#10;&#10;尽量说清楚：什么人、在什么时间、发生了什么事、你做了什么、对方什么反应" rows="7"></textarea>
+                    <div class="ai-input-actions">
+                        <button class="btn btn-primary btn-large" id="ai-analyze-btn" style="margin:0;">🚀 开始分析</button>
+                        <span class="ai-input-hint">Ctrl+Enter 快速提交</span>
+                    </div>
+                </div>
+
+                <!-- 输出区 -->
+                <div class="ai-output-area" id="ai-output-area" style="display:none;">
+                    <!-- 流式输出内容 -->
+                </div>
+                <div class="ai-output-footer" id="ai-output-footer" style="display:none;">
+                    <button class="copy-btn" id="ai-copy-btn" style="display:none;">📋 复制全文</button>
+                    <button class="btn-retry-secondary" id="ai-cancel-btn" onclick="location.reload()">🔄 重新分析</button>
+                </div>
+
+                <!-- 提示 -->
+                <div class="ai-disclaimer">
+                    <p>⚠️ AI分析仅供参考，不构成正式法律意见。每个案件情况不同，重要决定请咨询持证律师。</p>
+                    <p>🔑 API Key可在页面加载时弹出的窗口中修改，或点击<a href="#" onclick="document.getElementById('ai-key-modal').classList.add('open');document.body.style.overflow='hidden';return false;">这里</a>重新设置。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 法律条文知识库 -->
+    <!-- ============================================================ -->
+    <section class="legal-db-section section" id="legal-db-section">
+        <div class="container">
+            <button class="back-home" onclick="document.querySelector('.nav-logo').click()">← 返回首页</button>
+            <h2 class="section-title">📚 法律条文知识库</h2>
+            <p class="section-subtitle">搜索常用法律法规，每条都配有「大白话解释」，AI还能帮你换个说法再解释一遍</p>
+
+            <div class="legal-db-container">
+                <!-- 搜索 -->
+                <div class="legal-search-bar">
+                    <input type="text" class="search-input" id="legal-search-input" placeholder="搜索关键词、法律名称、条款内容... 如：加班费、借贷、食品安全">
+                </div>
+
+                <!-- 分类筛选 -->
+                <div class="filter-buttons" id="legal-filter-buttons">
+                    <!-- JS动态生成 -->
+                </div>
+
+                <!-- 条文列表 -->
+                <div class="provision-grid" id="provision-grid">
+                    <p class="loading-hint">⏳ 正在加载法律条文...</p>
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination" id="provision-pagination" style="display:none;">
+                    <button class="page-btn" id="provision-page-prev">← 上一页</button>
+                    <span class="page-info" id="provision-page-info"></span>
+                    <button class="page-btn" id="provision-page-next">下一页 →</button>
+                </div>
+
+                <!-- 无结果 -->
+                <div class="no-results" id="provision-no-results" style="display:none;">
+                    <p>😕 没有找到匹配的法律条文，试试换个关键词</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- AI API Key 弹窗 -->
+    <!-- ============================================================ -->
+    <div class="lawyer-modal-overlay" id="ai-key-modal">
+        <div class="lawyer-modal" style="max-width:500px;">
+            <div style="padding:36px 32px;text-align:center;">
+                <div style="font-size:2.5rem;margin-bottom:12px;">🔑</div>
+                <h3 style="font-weight:600;margin-bottom:8px;">设置 API 密钥</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;line-height:1.6;">
+                    AI维权指导和法律条文AI解释需要调用硅基流动API。<br>已预填默认密钥，你可以修改为自己的Key。
+                </p>
+                <input type="password" id="ai-key-input" class="upload-input" placeholder="sk-..." style="text-align:center;margin-bottom:16px;">
+                <div style="display:flex;gap:10px;justify-content:center;">
+                    <button class="btn btn-primary" id="ai-key-save">✅ 确认使用</button>
+                    <button class="btn-retry-secondary" onclick="document.getElementById('ai-key-modal').classList.remove('open');document.body.style.overflow='';">跳过</button>
+                </div>
+                <p style="color:#ccc;font-size:0.7rem;margin-top:14px;">密钥仅保存在你的浏览器中，不会上传</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
     <!-- 免责声明 -->
     <!-- ============================================================ -->
     <section class="disclaimer-section">
@@ -420,12 +521,15 @@
     </footer>
 
     <!-- 数据文件（通过script标签加载，file://协议100%兼容） -->
-    <script src="data/knowledge-base-data.js?v=202607231055c"></script>
-    <script src="data/lawyers-data.js?v=202607231055c"></script>
-    <script src="data/templates-data.js?v=202607231055c"></script>
+    <script src="data/knowledge-base-data.js?v=202607231130c"></script>
+    <script src="data/lawyers-data.js?v=202607231130c"></script>
+    <script src="data/templates-data.js?v=202607231130c"></script>
+    <script src="data/legal-provisions-data.js?v=202607231130c"></script>
     <!-- JavaScript -->
-    <script src="js/main.js?v=202607231055c"></script>
-    <script src="js/wizard.js?v=202607231055c"></script>
-    <script src="js/lawyer-search.js?v=202607231055c"></script>
+    <script src="js/main.js?v=202607231130c"></script>
+    <script src="js/wizard.js?v=202607231130c"></script>
+    <script src="js/lawyer-search.js?v=202607231130c"></script>
+    <script src="js/legal-search.js?v=202607231130c"></script>
+    <script src="js/ai-guide.js?v=202607231130c"></script>
 </body>
 </html>
