@@ -2178,15 +2178,46 @@ body.care-mode .footer-credit {
 }
 
 /* ---------- 关怀版 - 汉堡菜单适配 ---------- */
+body.care-mode .hamburger span {
+    width: 28px;
+    height: 2.5px;
+}
+body.care-mode .hamburger {
+    gap: 6px;
+}
 @media (max-width: 900px) {
     body.care-mode .nav-links a {
         font-size: 1.3rem;
+    }
+    body.care-mode .nav-links {
+        gap: 32px;
     }
 }
 @media (max-width: 600px) {
     body.care-mode .hero-title-main {
         font-size: 2rem;
     }
+    body.care-mode .nav-links {
+        width: 85%;
+        padding: 120px 36px 36px;
+        gap: 36px;
+    }
+    body.care-mode .hamburger {
+        display: flex;
+    }
+}
+
+/* ---------- 关怀版 - 方案结果标题 ---------- */
+body.care-mode .plan-result h3 {
+    font-size: 1.8rem !important;
+    color: var(--text) !important;
+    margin-bottom: 36px !important;
+}
+
+/* ---------- 关怀版 - 方案结果内灰色说明文字 ---------- */
+body.care-mode .plan-section p[style*="color"] {
+    font-size: 1.08rem !important;
+    line-height: 2.1 !important;
 }
 
 /* ---------- 关怀版 - 上传表单 ---------- */

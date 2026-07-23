@@ -252,7 +252,7 @@
 
         // 标题
         const titleEl = document.createElement('h3');
-        titleEl.style.cssText = 'text-align:center;font-size:1.4rem;margin-bottom:28px;color:#fff;';
+        titleEl.style.cssText = 'text-align:center;font-size:1.4rem;margin-bottom:28px;color:var(--text);';
         titleEl.textContent = '📋 ' + plan.title;
         planResult.appendChild(titleEl);
 
@@ -281,7 +281,7 @@
             tag.textContent = law.name;
             lawsSection.appendChild(tag);
             const explainP = document.createElement('p');
-            explainP.style.cssText = 'color:#94a3b8;font-size:0.88rem;margin:8px 0 0 0;line-height:1.7;';
+            explainP.style.cssText = 'color:var(--text-secondary);font-size:0.88rem;margin:8px 0 0 0;line-height:1.7;';
             explainP.textContent = '💡 ' + law.explain;
             lawsSection.appendChild(explainP);
             lawsSection.appendChild(document.createElement('br'));
@@ -298,7 +298,7 @@
             tag.textContent = '❌ ' + pit.title;
             pitfallsSection.appendChild(tag);
             const p = document.createElement('p');
-            p.style.cssText = 'color:#94a3b8;font-size:0.88rem;margin:6px 0 0 0;line-height:1.7;';
+            p.style.cssText = 'color:var(--text-secondary);font-size:0.88rem;margin:6px 0 0 0;line-height:1.7;';
             p.textContent = pit.detail;
             pitfallsSection.appendChild(p);
             pitfallsSection.appendChild(document.createElement('br'));
@@ -328,7 +328,7 @@
         lawyerTag.textContent = '✅ ' + plan.lawyerType;
         lawyerSection.appendChild(lawyerTag);
         const lawyerP = document.createElement('p');
-        lawyerP.style.cssText = 'color:#94a3b8;font-size:0.85rem;margin-top:10px;';
+        lawyerP.style.cssText = 'color:var(--text-secondary);font-size:0.85rem;margin-top:10px;';
         lawyerP.innerHTML = '在 <a href="#lawyer-section" style="color:#3b82f6;">查找律师</a> 板块中搜索对应领域的律师。';
         lawyerSection.appendChild(lawyerP);
         planResult.appendChild(lawyerSection);
@@ -375,7 +375,7 @@
             tplSection.appendChild(tplList);
 
             const tplHint = document.createElement('p');
-            tplHint.style.cssText = 'color:#94a3b8;font-size:0.8rem;margin-top:12px;';
+            tplHint.style.cssText = 'color:var(--text-secondary);font-size:0.8rem;margin-top:12px;';
             tplHint.textContent = '👆 点击标签可跳转到文书模板区并自动筛选';
             tplSection.appendChild(tplHint);
 

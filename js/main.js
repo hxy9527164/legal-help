@@ -121,21 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================================
-    //  4. 首页入口卡片 → 跳转到对应板块
-    // ============================================================
-    entryCards.forEach(function (card) {
-        card.addEventListener('click', function () {
-            const targetId = this.getAttribute('data-target');
-            if (targetId) {
-                const target = document.getElementById(targetId);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-    });
-
-    // ============================================================
     //  5. 诉讼费计算器
     // ============================================================
     var calcAmount = document.getElementById('calc-amount');
@@ -259,8 +244,17 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
     // ============================================================
-    //  8. 初始状态
+    //  8. 滚动监听（导航栏阴影）
     // ============================================================
-    updateNavOnScroll();
+    function updateNavOnScroll() {
+        if (currentSection === 'home') {
+            if (window.scrollY > 60) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+    }
+    window.addEventListener('scroll', updateNavOnScroll, { passive: true });
 
 });
