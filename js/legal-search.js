@@ -117,8 +117,9 @@
         if (!sidebarTree) return;
         sidebarTree.innerHTML = '';
 
-        // "全部" 节点
+        // "全部" 节点（默认激活）
         var allNode = createTreeNode('all', 'all', '📚 全部法律条文', true);
+        allNode.classList.add('active');
         sidebarTree.appendChild(allNode);
 
         // 中国法节点（默认展开）

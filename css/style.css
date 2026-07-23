@@ -1638,6 +1638,7 @@ input:focus-visible {
     .ai-output-content { max-height: 55vh; }
     .legal-layout { grid-template-columns: 1fr; }
     .legal-sidebar { position: static; max-height: none; }
+    .sidebar-tree { max-height: 40vh; overflow-y: auto; }
 }
 
 @media (max-width: 600px) {
@@ -2869,6 +2870,9 @@ body.care-mode .prov-related {
 body.care-mode .prov-related-link {
     font-size: 1rem;
 }
+body.care-mode .tree-count {
+    font-size: 0.9rem;
+}
 
 /* ---------- 关怀版 - 汉堡菜单适配 ---------- */
 body.care-mode .hamburger span {
@@ -3034,7 +3038,21 @@ body.care-mode .care-mode-toggle .toggle-icon {
     #ai-reset-btn,
     .ai-explain-btn,
     .pagination,
-    .legal-search-bar { display: none !important; }
+    .legal-search-bar,
+    .legal-sidebar,
+    .legal-top-bar,
+    .legal-adv-filters,
+    .legal-breadcrumb,
+    .legal-result-header,
+    .tree-parent-header,
+    .tree-toggle,
+    .tree-count,
+    .prov-related,
+    .prov-country-tag,
+    .prov-hierarchy-tag,
+    .prov-meta-row,
+    .prov-expand-btn,
+    .ai-explain-btn { display: none !important; }
 
     /* 重置布局 */
     body {
