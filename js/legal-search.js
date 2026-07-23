@@ -168,7 +168,7 @@
             card.innerHTML =
                 '<div class="prov-header">' +
                     '<span class="prov-category-tag">' + catName + '</span>' +
-                    '<span class="prov-law-name">' + p.lawName + ' ' + p.article + '</span>' +
+                    '<span class="prov-law-name">' + escapeHTML(p.lawName) + ' ' + escapeHTML(p.article) + '</span>' +
                 '</div>' +
                 '<div class="prov-original-wrapper">' +
                     '<div class="prov-original-label">📜 法条原文</div>' +

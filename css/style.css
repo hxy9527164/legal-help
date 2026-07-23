@@ -2671,6 +2671,23 @@ body.care-mode :focus-visible {
     outline-offset: 4px;
 }
 
+/* ---------- 关怀版 - AI输出区底部按钮 ---------- */
+body.care-mode .ai-output-footer {
+    gap: 16px;
+}
+body.care-mode #ai-reset-btn {
+    font-size: 1.1rem;
+    padding: 14px 28px;
+    min-height: 48px;
+}
+
+/* ---------- 关怀版 - 条文库搜索框 ---------- */
+body.care-mode .legal-search-bar .search-input {
+    font-size: 1.15rem;
+    padding: 16px 22px;
+    min-height: 56px;
+}
+
 /* ---------- 关怀版 - 律师总数提示 ---------- */
 body.care-mode .lawyer-count {
     font-size: 1.1rem !important;
@@ -2743,7 +2760,18 @@ body.care-mode .care-mode-toggle .toggle-icon {
     .hero-bg-grid,
     #generate-plan,
     .btn,
-    .nav-links { display: none !important; }
+    .nav-links,
+    .care-mode-toggle,
+    .ai-input-area,
+    .ai-input-actions,
+    .ai-disclaimer,
+    .ai-output-footer,
+    #ai-cancel-footer,
+    #ai-stop-btn,
+    #ai-reset-btn,
+    .ai-explain-btn,
+    .pagination,
+    .legal-search-bar { display: none !important; }
 
     /* 重置布局 */
     body {
