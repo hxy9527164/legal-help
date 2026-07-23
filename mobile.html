@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="法律自助助手">
+<meta name="theme-color" content="#b8956a">
+<title>法律自助助手</title>
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuazleW+i+iHquWKqeWKqeaIvyIsCiAgInNob3J0X25hbWUiOiAi5rOV5b6L5Yqp5omLIiwKICAic3RhcnRfdXJsIjogIi4v5rOV5b6L6Ieq5Yqp5Yqp5omLLeaJi+acuueJiC5odG1sIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmFmOGY1IiwKICAidGhlbWVfY29sb3IiOiAiI2I4OTU2YSIsCiAgImljb25zIjogW3sKICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhCeVpYTnphVzV1UFNJeU1EQXlJajRLUEM5emRtYysiLAogICAgInNpemVzIjogIjE5MngxOTIiLAogICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICB9XQp9">
+<style>
+:root {
+  --primary: #b8956a;
+  --primary-dark: #9a7d56;
+  --primary-light: #f5efe6;
+  --bg: #faf8f5;
+  --card-bg: #ffffff;
+  --text: #2c2416;
+  --text-secondary: #6b5e4a;
+  --text-muted: #9b8e7a;
+  --border: #e8e0d5;
+  --danger: #c0392b;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.1);
+  --tab-height: 60px;
+  --header-height: 50px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --font-xs: 12px;
+  --font-sm: 13px;
+  --font-md: 15px;
+  --font-lg: 17px;
+  --font-xl: 20px;
+  --font-xxl: 24px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-md);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  padding-bottom: calc(var(--tab-height) + var(--safe-bottom));
+  padding-top: var(--header-height);
+}
+
+/* ===== Header ===== */
+.app-header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  height: var(--header-height);
+  background: rgba(250,248,245,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+}
+.header-title {
+  font-size: var(--font-lg); font-weight: 700;
+  color: var(--text); display: flex; align-items: center; gap: 8px;
+}
+.header-title .icon { font-size: 22px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.btn-icon {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card-bg);
+  font-size: 16px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-secondary);
+}
+.btn-icon:active { background: var(--primary-light); }
+
+/* ===== Bottom Tab Bar ===== */
+.tab-bar {
+  position: fixed; bottom:0; left:0; right:0; z-index:100;
+  height: calc(var(--tab-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.tab-item {
+  flex:1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer; padding: 6px 0;
+  color: var(--text-muted); transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.tab-item.active { color: var(--primary); }
+.tab-item .tab-icon { font-size: 22px; line-height: 1; }
+.tab-item .tab-label { font-size: var(--font-xs); font-weight: 500; }
+
+/* ===== Pages ===== */
+.page {
+  display: none; padding: 16px;
+  animation: fadeIn 0.25s ease;
+}
+.page.active { display: block; }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ===== Home Page ===== */
+.hero-card {
+  background: linear-gradient(135deg, #b8956a 0%, #d4b896 100%);
+  border-radius: var(--radius); padding: 24px 20px;
+  color: #fff; margin-bottom: 16px; position: relative; overflow: hidden;
+}
+.hero-card::after {
+  content: '⚖️'; position: absolute; right: 12px; top: 12px;
+  font-size: 64px; opacity: 0.15;
+}
+.hero-card h2 { font-size: var(--font-xxl); font-weight: 700; margin-bottom: 4px; position: relative; z-index:1; }
+.hero-card p { font-size: var(--font-sm); opacity: 0.9; position: relative; z-index:1; }
+
+.entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.entry-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 6px;
+}
+.entry-card:active { transform: scale(0.97); background: var(--primary-light); }
+.entry-card .entry-icon { font-size: 32px; }
+.entry-card .entry-label { font-size: var(--font-sm); font-weight: 600; color: var(--text); }
+.entry-card .entry-desc { font-size: var(--font-xs); color: var(--text-muted); }
+
+.quick-actions { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.quick-action {
+  flex-shrink: 0; padding: 10px 16px;
+  border-radius: 20px; background: var(--card-bg);
+  border: 1px solid var(--border); font-size: var(--font-sm);
+  cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+  color: var(--text);
+}
+.quick-action:active { background: var(--primary-light); }
+.quick-action .qa-icon { font-size: 16px; }
+
+/* ===== Wizard Page ===== */
+.wizard-steps { display: flex; margin-bottom: 16px; position: relative; }
+.wizard-steps::before {
+  content: ''; position: absolute; top: 16px; left: 10%; right: 10%;
+  height: 2px; background: var(--border); z-index: 0;
+}
+.wizard-step {
+  flex:1; display: flex; flex-direction: column; align-items: center;
+  gap: 6px; z-index: 1; position: relative;
+}
+.wizard-step .step-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--card-bg); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--font-sm); font-weight: 700; color: var(--text-muted);
+  transition: all 0.3s;
+}
+.wizard-step.active .step-dot,
+.wizard-step.done .step-dot {
+  background: var(--primary); border-color: var(--primary); color: #fff;
+}
+.wizard-step.done .step-dot::after { content: '✓'; }
+.wizard-step .step-label { font-size: var(--font-xs); color: var(--text-muted); }
+.wizard-step.active .step-label { color: var(--primary); font-weight: 600; }
+
+.wizard-panel { display: none; }
+.wizard-panel.active { display: block; }
+
+.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.category-card {
+  background: var(--card-bg); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 20px 16px; text-align: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.category-card:active, .category-card.selected {
+  border-color: var(--primary); background: var(--primary-light);
+}
+.category-card .cat-icon { font-size: 36px; margin-bottom: 8px; }
+.category-card .cat-name { font-size: var(--font-md); font-weight: 600; }
+.category-card .cat-desc { font-size: var(--font-xs); color: var(--text-muted); margin-top: 4px; }
+
+.scenario-list { display: flex; flex-direction: column; gap: 8px; }
+.scenario-item {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  cursor: pointer; display: flex; align-items: center; gap: 12px;
+}
+.scenario-item:active { background: var(--primary-light); }
+.scenario-item .si-icon { font-size: 28px; }
+.scenario-item .si-info { flex:1; }
+.scenario-item .si-name { font-weight: 600; font-size: var(--font-md); }
+.scenario-item .si-desc { font-size: var(--font-xs); color: var(--text-muted); }
+.scenario-item .si-arrow { color: var(--text-muted); }
+
+.question-block { margin-bottom: 20px; }
+.question-block .q-label { font-weight: 600; margin-bottom: 10px; display: block; font-size: var(--font-md); }
+.option-group { display: flex; flex-direction: column; gap: 8px; }
+.option-item {
+  padding: 12px 16px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  background: var(--card-bg); font-size: var(--font-md);
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.15s;
+}
+.option-item:active, .option-item.selected {
+  border-color: var(--primary); background: var(--primary-light);
+}
+.option-item .oi-radio {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.option-item.selected .oi-radio {
+  border-color: var(--primary);
+}
+.option-item.selected .oi-radio::after {
+  content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--primary);
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 12px 24px; border-radius: var(--radius-sm);
+  font-size: var(--font-md); font-weight: 600; border: none;
+  cursor: pointer; transition: all 0.2s; width: 100%;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:active { background: var(--primary-dark); }
+.btn-outline {
+  background: var(--card-bg); color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn-outline:active { background: var(--primary-light); }
+.btn-sm { padding: 8px 16px; font-size: var(--font-sm); width: auto; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-block { display: flex; width: 100%; }
+
+/* ===== Lawyer Page ===== */
+.search-bar {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.search-input {
+  flex:1; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: var(--font-md);
+  background: var(--card-bg); color: var(--text);
+  -webkit-appearance: none;
+}
+.search-input:focus { outline: none; border-color: var(--primary); }
+
+.filter-scroll {
+  display: flex; gap: 6px; margin-bottom: 12px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.filter-chip {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
+  border: 1px solid var(--border); background: var(--card-bg);
+  font-size: var(--font-sm); cursor: pointer; white-space: nowrap;
+  color: var(--text-secondary);
+}
+.filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.lawyer-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px;
+  margin-bottom: 10px; cursor: pointer;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.lawyer-card:active { background: var(--primary-light); }
+.lawyer-avatar {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--primary-light); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--primary); overflow: hidden;
+}
+.lawyer-avatar img { width:100%; height:100%; object-fit:cover; }
+.lawyer-info { flex:1; min-width: 0; }
+.lawyer-info .lw-name { font-weight: 700; font-size: var(--font-md); }
+.lawyer-info .lw-firm { font-size: var(--font-xs); color: var(--text-muted); }
+.lawyer-info .lw-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.lawyer-info .lw-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  background: var(--primary-light); color: var(--primary);
+}
+.lawyer-info .lw-meta { font-size: var(--font-xs); color: var(--text-muted); margin-top: 4px; }
+
+/* ===== Template Page ===== */
+.template-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;
+}
+.template-header {
+  padding: 14px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+}
+.template-header .th-icon { font-size: 24px; }
+.template-header .th-info { flex:1; }
+.template-header .th-name { font-weight: 600; font-size: var(--font-md); }
+.template-header .th-desc { font-size: var(--font-xs); color: var(--text-muted); }
+.template-header .th-arrow { color: var(--text-muted); transition: transform 0.2s; }
+.template-card.expanded .th-arrow { transform: rotate(180deg); }
+.template-body {
+  display: none; padding: 0 16px 14px;
+  border-top: 1px solid var(--border);
+}
+.template-card.expanded .template-body { display: block; }
+.template-content {
+  background: #f9f7f3; border-radius: var(--radius-sm);
+  padding: 14px; font-size: var(--font-sm); white-space: pre-wrap;
+  max-height: 300px; overflow-y: auto; line-height: 1.8;
+  margin: 12px 0;
+}
+.btn-copy {
+  width: 100%; padding: 10px; background: var(--primary);
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-size: var(--font-md); cursor: pointer; font-weight: 600;
+}
+.btn-copy:active { background: var(--primary-dark); }
+
+/* ===== AI Page ===== */
+.ai-input-area { margin-bottom: 12px; }
+.ai-textarea {
+  width: 100%; min-height: 120px; padding: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: var(--font-md); background: var(--card-bg); color: var(--text);
+  resize: vertical; font-family: inherit; -webkit-appearance: none;
+}
+.ai-textarea:focus { outline: none; border-color: var(--primary); }
+.ai-output {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; min-height: 100px;
+  font-size: var(--font-sm); line-height: 1.8; margin-top: 12px;
+}
+.ai-output .ai-loading {
+  display: flex; align-items: center; gap: 8px; color: var(--text-muted);
+}
+.ai-output .ai-loading .dot-pulse::after {
+  content: '...'; animation: dots 1.5s steps(4,end) infinite;
+}
+@keyframes dots { 0% { content:'...'; } 25% { content:''; } 50% { content:'.'; } 75% { content:'..'; } }
+
+.ai-step-title { font-weight: 700; color: var(--primary); margin: 12px 0 6px; font-size: var(--font-md); }
+.ai-output ol, .ai-output ul { padding-left: 20px; margin: 6px 0; }
+.ai-output li { margin: 4px 0; }
+
+/* ===== Fee Calculator ===== */
+.calc-form { margin-bottom: 12px; }
+.calc-form label { display: block; font-weight: 600; margin-bottom: 4px; font-size: var(--font-sm); }
+.calc-form input, .calc-form select {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: var(--font-md);
+  background: var(--card-bg); margin-bottom: 12px; -webkit-appearance: none;
+}
+.calc-result {
+  background: var(--primary-light); border-radius: var(--radius);
+  padding: 16px; text-align: center;
+}
+.calc-result .result-amount { font-size: 32px; font-weight: 700; color: var(--primary); }
+
+/* ===== FAQ ===== */
+.faq-item {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden;
+}
+.faq-q {
+  padding: 14px 16px; cursor: pointer; font-weight: 600;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: var(--font-md);
+}
+.faq-q:active { background: var(--primary-light); }
+.faq-a { display: none; padding: 0 16px 14px; font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.7; }
+.faq-item.open .faq-a { display: block; }
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200;
+  display: none; align-items: flex-end; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-sheet {
+  background: var(--bg); border-radius: 16px 16px 0 0;
+  width: 100%; max-height: 80vh; overflow-y: auto;
+  padding: 20px 16px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--border); margin: 0 auto 16px;
+}
+
+/* ===== Provisions Page ===== */
+.provision-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+}
+.provision-card .pv-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.provision-card .pv-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  background: #e8e0d5; color: var(--text-secondary);
+}
+.provision-card .pv-title { font-weight: 700; font-size: var(--font-md); margin-bottom: 4px; }
+.provision-card .pv-text {
+  font-size: var(--font-sm); color: var(--text-secondary);
+  overflow: hidden; max-height: 80px; transition: max-height 0.3s;
+}
+.provision-card .pv-text.expanded { max-height: none; }
+.provision-card .pv-expand {
+  color: var(--primary); font-size: var(--font-sm); cursor: pointer; margin-top: 4px;
+}
+
+/* ===== Glossary ===== */
+.glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.glossary-item {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+}
+.glossary-item h4 { font-size: var(--font-sm); margin-bottom: 4px; color: var(--primary); }
+.glossary-item p { font-size: var(--font-xs); color: var(--text-secondary); }
+
+/* ===== Plan Result ===== */
+.plan-section { margin-bottom: 16px; }
+.plan-section h4 {
+  font-size: var(--font-md); color: var(--primary);
+  border-bottom: 2px solid var(--primary-light); padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+.action-step {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 6px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.action-step .as-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: var(--font-xs);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-weight: 700;
+}
+.law-tag, .warning-tag {
+  display: inline-block; padding: 6px 12px; border-radius: 16px;
+  margin: 3px; font-size: var(--font-sm);
+}
+.law-tag { background: #e8f5e9; color: #2e7d32; }
+.warning-tag { background: #fff3e0; color: #e65100; }
+
+/* ===== Care Mode ===== */
+body.care-mode {
+  --font-xs: 16px; --font-sm: 17px; --font-md: 19px;
+  --font-lg: 21px; --font-xl: 24px; --font-xxl: 28px;
+  --radius: 16px; --radius-sm: 12px;
+  --header-height: 56px;
+}
+body.care-mode .option-item { padding: 16px; }
+body.care-mode .btn { padding: 16px 24px; }
+body.care-mode .tab-bar { height: calc(68px + var(--safe-bottom)); }
+
+/* ===== Section Titles ===== */
+.section-title {
+  font-size: var(--font-lg); font-weight: 700; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ===== Empty / Error States ===== */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--text-muted);
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
+.error-banner {
+  background: #fff3e0; border: 1px solid #ffcc80;
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  margin-bottom: 12px; font-size: var(--font-sm); color: #e65100;
+}
+.success-toast {
+  position: fixed; top: calc(var(--header-height) + 12px); left: 50%;
+  transform: translateX(-50%); z-index: 300;
+  background: var(--success); color: #fff; padding: 10px 24px;
+  border-radius: 20px; font-size: var(--font-sm); font-weight: 600;
+  animation: fadeIn 0.2s ease;
+  pointer-events: none;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin-top: 16px;
+}
+.pagination button {
+  padding: 8px 16px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--card-bg);
+  cursor: pointer; font-size: var(--font-sm);
+}
+.pagination button:disabled { opacity: 0.4; }
+
+/* ===== Toggle ===== */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0;
+}
+.toggle-label { font-size: var(--font-sm); font-weight: 600; }
+.toggle-switch {
+  width: 50px; height: 28px; border-radius: 14px;
+  background: var(--border); cursor: pointer; position: relative;
+  transition: background 0.2s;
+}
+.toggle-switch.on { background: var(--primary); }
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch.on::after { left: 25px; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div id="diag-status" style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#333;color:#fff;font-size:11px;text-align:center;padding:2px;display:block;">⏳ 等待脚本...</div>
+<header class="app-header">
+  <div class="header-title"><span class="icon">⚖️</span><span id="headerLabel">法律自助助手</span></div>
+  <div class="header-actions">
+    <button class="btn-icon" id="careToggle" title="关怀版">👁</button>
+  </div>
+</header>
+
+<!-- ===== PAGES ===== -->
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero-card">
+    <h2>法律自助助手</h2>
+    <p>人人值得拥有的法律工具箱 · 免费 · 离线 · 好用</p>
+  </div>
+
+  <div class="entry-grid">
+    <div class="entry-card" data-nav="wizard">
+      <div class="entry-icon">🔍</div>
+      <div class="entry-label">问题诊断</div>
+      <div class="entry-desc">智能分析法律问题</div>
+    </div>
+    <div class="entry-card" data-nav="lawyer">
+      <div class="entry-icon">👨‍⚖️</div>
+      <div class="entry-label">查找律师</div>
+      <div class="entry-desc">全国律师信息库</div>
+    </div>
+    <div class="entry-card" data-nav="template">
+      <div class="entry-icon">📄</div>
+      <div class="entry-label">文书模板</div>
+      <div class="entry-desc">一键复制法律文书</div>
+    </div>
+    <div class="entry-card" data-nav="ai">
+      <div class="entry-icon">🤖</div>
+      <div class="entry-label">AI指导</div>
+      <div class="entry-desc">智能维权分析</div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <div class="quick-action" data-nav="calc"><span class="qa-icon">💰</span>诉讼费计算</div>
+    <div class="quick-action" data-nav="faq"><span class="qa-icon">❓</span>常见问题</div>
+    <div class="quick-action" data-nav="provisions"><span class="qa-icon">📚</span>法律条文</div>
+    <div class="quick-action" data-nav="glossary"><span class="qa-icon">📖</span>术语词典</div>
+  </div>
+
+  <div class="section-title">📋 法律工具箱</div>
+  <div class="entry-grid">
+    <div class="entry-card" data-nav="calc">
+      <div class="entry-icon">💰</div>
+      <div class="entry-label">诉讼费计算</div>
+      <div class="entry-desc">预估诉讼费用</div>
+    </div>
+    <div class="entry-card" data-nav="faq">
+      <div class="entry-icon">❓</div>
+      <div class="entry-label">常见问题</div>
+      <div class="entry-desc">高频法律疑问</div>
+    </div>
+    <div class="entry-card" data-nav="provisions">
+      <div class="entry-icon">📚</div>
+      <div class="entry-label">法律条文</div>
+      <div class="entry-desc">条文检索百科</div>
+    </div>
+    <div class="entry-card" data-nav="glossary">
+      <div class="entry-icon">📖</div>
+      <div class="entry-label">术语词典</div>
+      <div class="entry-desc">读懂法律名词</div>
+    </div>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div class="page" id="page-wizard">
+  <div class="wizard-steps" id="wizardSteps">
+    <div class="wizard-step active" data-step="1">
+      <div class="step-dot">1</div><div class="step-label">选类型</div>
+    </div>
+    <div class="wizard-step" data-step="2">
+      <div class="step-dot">2</div><div class="step-label">选场景</div>
+    </div>
+    <div class="wizard-step" data-step="3">
+      <div class="step-dot">3</div><div class="step-label">答问题</div>
+    </div>
+    <div class="wizard-step" data-step="4">
+      <div class="step-dot">4</div><div class="step-label">看方案</div>
+    </div>
+  </div>
+
+  <div class="wizard-panel active" id="wizPanel1">
+    <div class="section-title">请选择纠纷类型</div>
+    <div class="category-grid" id="categoryGrid"></div>
+  </div>
+
+  <div class="wizard-panel" id="wizPanel2">
+    <div class="section-title" id="wizScenarioTitle">请选择具体场景</div>
+    <button class="btn btn-outline btn-sm" id="wizBack1" style="margin-bottom:12px;">← 返回重选类型</button>
+    <div class="scenario-list" id="scenarioList"></div>
+  </div>
+
+  <div class="wizard-panel" id="wizPanel3">
+    <div class="section-title" id="wizQuestionTitle">请回答以下问题</div>
+    <button class="btn btn-outline btn-sm" id="wizBack2" style="margin-bottom:12px;">← 返回重选场景</button>
+    <div id="questionForm"></div>
+    <button class="btn btn-primary" id="generatePlan">生成维权方案 →</button>
+  </div>
+
+  <div class="wizard-panel" id="wizPanel4">
+    <button class="btn btn-outline btn-sm" id="wizRestart" style="margin-bottom:12px;">← 重新诊断</button>
+    <div id="planResult"></div>
+  </div>
+</div>
+
+<!-- LAWYER -->
+<div class="page" id="page-lawyer">
+  <div class="section-title">👨‍⚖️ 查找律师</div>
+  <div class="search-bar">
+    <input class="search-input" id="lawyerSearch" placeholder="搜索律师姓名、律所、领域...">
+  </div>
+  <div class="filter-scroll" id="lawyerFieldFilters"></div>
+  <div class="filter-scroll" id="lawyerRegionFilters"></div>
+  <div id="lawyerList"></div>
+  <div class="pagination" id="lawyerPagination"></div>
+
+  <!-- Add Lawyer Button -->
+  <button class="btn btn-outline btn-sm" id="addLawyerBtn" style="margin-top:8px;">+ 添加律师信息</button>
+</div>
+
+<!-- TEMPLATE -->
+<div class="page" id="page-template">
+  <div class="section-title">📄 文书模板</div>
+  <div class="filter-scroll" id="templateCats"></div>
+  <div id="templateList"></div>
+</div>
+
+<!-- AI -->
+<div class="page" id="page-ai">
+  <div class="section-title">🤖 AI维权指导</div>
+  <p style="font-size:var(--font-sm);color:var(--text-muted);margin-bottom:12px;">用大白话描述你的法律问题，AI将给你专业的维权建议</p>
+  <div class="ai-input-area">
+    <textarea class="ai-textarea" id="aiInput" placeholder="例如：我在某电商平台买了一个手机，收到后发现是假货，商家拒绝退款，我该怎么办？"></textarea>
+    <button class="btn btn-primary" id="aiAnalyze" style="margin-top:8px;">🔍 开始分析</button>
+    <button class="btn btn-outline btn-sm" id="aiStop" style="margin-top:6px;display:none;">⏹ 停止生成</button>
+  </div>
+  <div class="ai-output" id="aiOutput">
+    <div style="text-align:center;color:var(--text-muted);padding:20px;">
+      👆 输入你的法律问题，AI帮你分析维权方案
+    </div>
+  </div>
+  <button class="btn btn-outline btn-sm" id="aiCopy" style="margin-top:8px;display:none;">📋 复制分析结果</button>
+  <button class="btn btn-outline btn-sm" id="aiReset" style="margin-top:6px;">🔄 重新输入</button>
+</div>
+
+<!-- CALC -->
+<div class="page" id="page-calc">
+  <div class="section-title">💰 诉讼费计算器</div>
+  <div class="calc-form">
+    <label>案件标的额（元）</label>
+    <input type="number" id="calcAmount" placeholder="请输入争议金额" inputmode="numeric">
+    <label>案件类型</label>
+    <select id="calcType">
+      <option value="property">财产案件</option>
+      <option value="divorce">离婚案件</option>
+      <option value="labor">劳动争议</option>
+      <option value="other">其他非财产案件</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" id="calcBtn">计算诉讼费</button>
+  <div class="calc-result" id="calcResult" style="display:none;margin-top:12px;"></div>
+</div>
+
+<!-- FAQ -->
+<div class="page" id="page-faq">
+  <div class="section-title">❓ 常见法律问题</div>
+  <div id="faqList"></div>
+</div>
+
+<!-- PROVISIONS -->
+<div class="page" id="page-provisions">
+  <div class="section-title">📚 法律条文百科</div>
+  <div class="search-bar">
+    <input class="search-input" id="provSearch" placeholder="搜索法律条文...">
+  </div>
+  <div class="filter-scroll" id="provBranchFilters"></div>
+  <div id="provList"></div>
+  <div class="pagination" id="provPagination"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div class="page" id="page-glossary">
+  <div class="section-title">📖 法律术语词典</div>
+  <div class="glossary-grid" id="glossaryGrid"></div>
+</div>
+
+<!-- ===== BOTTOM TAB BAR ===== -->
+<nav class="tab-bar" id="tabBar">
+  <div class="tab-item active" data-tab="home">
+    <span class="tab-icon">🏠</span><span class="tab-label">首页</span>
+  </div>
+  <div class="tab-item" data-tab="wizard">
+    <span class="tab-icon">🔍</span><span class="tab-label">诊断</span>
+  </div>
+  <div class="tab-item" data-tab="lawyer">
+    <span class="tab-icon">👨‍⚖️</span><span class="tab-label">律师</span>
+  </div>
+  <div class="tab-item" data-tab="template">
+    <span class="tab-icon">📄</span><span class="tab-label">模板</span>
+  </div>
+  <div class="tab-item" data-tab="ai">
+    <span class="tab-icon">🤖</span><span class="tab-label">AI</span>
+  </div>
+</nav>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet" id="modalContent"></div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="success-toast" style="display:none;"></div>
+
+<script>
+'use strict';
+
+// ===== DIAGNOSTIC: show script is alive =====
+var _diag = document.getElementById('diag-status');
+if (_diag) { _diag.textContent = '✅ 脚本已执行'; _diag.style.color = 'green'; }
+
+// ==================== APP STATE ====================
+const DATA_BASE = 'https://raw.githubusercontent.com/hxy9527164/legal-help/main/';
+let knowledgeBase = null, lawyersData = [], templatesData = [], provisionsData = [];
+let currentTab = 'home';
+let wizardState = { category: null, scenario: null, answers: {} };
+let lawyerPage = 1, lawyerFilters = { search: '', field: '全部', region: '全部' };
+let provPage = 1, provFilters = { search: '', branch: '全部' };
+let templateCat = '全部';
+let aiAbortController = null;
+
+// ==================== DOM REFS ====================
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+// ==================== TOAST ====================
+function showToast(msg, duration = 2000) {
+  const t = $('#toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, duration);
+}
+
+// ==================== NAVIGATION ====================
+function navigateTo(tab) {
+  currentTab = tab;
+  $$('.page').forEach(p => p.classList.remove('active'));
+  const page = $(`#page-${tab}`);
+  if (page) page.classList.add('active');
+
+  $$('.tab-item').forEach(ti => ti.classList.remove('active'));
+  const ti = $(`.tab-item[data-tab="${tab}"]`);
+  if (ti) ti.classList.add('active');
+
+  $('#headerLabel').textContent = {
+    home:'法律自助助手', wizard:'问题诊断', lawyer:'查找律师',
+    template:'文书模板', ai:'AI指导', calc:'诉讼费计算',
+    faq:'常见问题', provisions:'法律条文', glossary:'术语词典'
+  }[tab] || '法律自助助手';
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+// ==================== DATA LOADING ====================
+async function loadJSON(path) {
+  try {
+    const resp = await fetch(DATA_BASE + path);
+    if (resp.ok) return await resp.json();
+  } catch(e) { console.warn('Fetch failed:', path, e); }
+  // Fallback: try relative path
+  try {
+    const resp = await fetch('https://hxy9527164.github.io/legal-help/' + path);
+    if (resp.ok) return await resp.json();
+  } catch(e) {}
+  return null;
+}
+
+async function loadAllData() {
+  const results = await Promise.allSettled([
+    loadJSON('data/knowledge-base.json'),
+    loadJSON('data/lawyers.json'),
+    loadJSON('data/templates.json'),
+    loadJSON('data/legal-provisions-data.js')
+  ]);
+
+  knowledgeBase = results[0].value;
+  lawyersData = results[1].value || [];
+  templatesData = results[2].value || [];
+
+  // Handle provisions (might be JS file)
+  if (results[3].value) {
+    provisionsData = Array.isArray(results[3].value) ? results[3].value : [];
+  } else {
+    // Try loading provisions differently
+    try {
+      const resp = await fetch(DATA_BASE + 'data/legal-provisions-data.js');
+      const text = await resp.text();
+      const match = text.match(/window\.__legalProvisionsData\s*=\s*(\[[\s\S]*\])\s*;?/);
+      if (match) {
+        provisionsData = JSON.parse(match[1]);
+      }
+    } catch(e) { provisionsData = []; }
+  }
+
+  if (!knowledgeBase) {
+    knowledgeBase = getDefaultKnowledgeBase();
+  }
+  if (!lawyersData.length) {
+    lawyersData = getDefaultLawyers();
+  }
+  if (!templatesData.length) {
+    templatesData = getDefaultTemplates();
+  }
+
+  return true;
+}
+
+// ==================== DEFAULT DATA (fallbacks) ====================
+function getDefaultKnowledgeBase() { return {"categories":{"consumer":{"id":"consumer","name":"消费纠纷","icon":"🛒","description":"网购、退款、假货等消费问题","scenarios":[{"id":"fake-goods","name":"买到假货","description":"网购或实体店买到假冒伪劣商品","questions":[{"id":"q1","label":"购买渠道是什么？","type":"radio","options":["电商平台（淘宝/京东/拼多多等）","实体店","直播带货","微商/朋友圈"]},{"id":"q2","label":"是否有保留购物凭证？","type":"radio","options":["有发票/收据/订单截图","部分有","完全没有"]},{"id":"q3","label":"商家目前态度如何？","type":"radio","options":["拒绝退款","拖延不理","同意退款但要求自付运费","已联系不上"]}],"plan":{"title":"买到假货维权方案","steps":[{"order":1,"title":"固定证据","detail":"截图保存商品页面、订单详情、与商家的聊天记录。对商品拍照录像，保留原包装。"},{"order":2,"title":"联系平台客服","detail":"通过平台官方渠道投诉，提交假货证据，要求退一赔三（不足500元按500元赔）。引用消保法第55条。"},{"order":3,"title":"12315投诉","detail":"拨打12315或通过全国12315平台网站/App投诉。提供商家全称、统一社会信用代码（如有）。"},{"order":4,"title":"向市场监管部门举报","detail":"携带证据材料到商家所在地市场监管局举报，要求立案查处。"},{"order":5,"title":"起诉","detail":"若金额较大且协商无果，可向法院起诉。诉讼标的=商品价款+三倍赔偿+维权合理开支。"}],"laws":[{"name":"消费者权益保护法第55条","explain":"经营者有欺诈行为，退一赔三，不足500元按500元计算"},{"name":"电子商务法第38条","explain":"平台知道经营者侵害消费者权益而未采取必要措施的，承担连带责任"}],"pitfalls":[{"title":"超过维权时效","detail":"发现问题后要尽快行动，电商平台一般有15天售后期"},{"title":"证据灭失","detail":"不要先退货再维权，先拍照截屏保存所有证据后再退货"}],"contacts":[{"name":"全国12315平台","detail":"电话：12315 | 网站：www.12315.cn"},{"name":"中国消费者协会","detail":"电话：010-63273355"}],"lawyerType":"消费维权律师","templateIds":["complaint-letter"]}},{"id":"refund-dispute","name":"退款纠纷","description":"退货退款被拒，商家拖延退款","questions":[{"id":"q1","label":"是否已过平台售后期？","type":"radio","options":["在售后期内","刚过售后期","已超过很久"]},{"id":"q2","label":"退货原因是什么？","type":"radio","options":["商品质量问题","不想要了/七天无理由","商品与描述不符","未收到货"]}],"plan":{"title":"退款纠纷维权方案","steps":[{"order":1,"title":"检查退款政策","detail":"确认平台和商家的退款政策，特别是七天无理由退货的适用条件和例外情况。"},{"order":2,"title":"发起平台退款申请","detail":"在订单页面点击申请退款，选择正确的原因，上传相关凭证。"},{"order":3,"title":"申请平台介入","detail":"若商家拒绝，申请平台客服介入裁决。电商平台通常有先行赔付机制。"},{"order":4,"title":"12315投诉","detail":"向商家所在地市场监管部门投诉。"}],"laws":[{"name":"消费者权益保护法第25条","explain":"网购商品自收到之日起七日内可无理由退货（特殊商品除外）"}],"pitfalls":[{"title":"错过七天期限","detail":"七天无理由退货从签收日起算，不是从下单日起算。保留快递签收记录很重要。"}],"contacts":[{"name":"各电商平台客服","detail":"淘宝9510211 | 京东950618 | 拼多多客服中心"}],"lawyerType":"消费维权律师"}}]},"labor":{"id":"labor","name":"劳动纠纷","icon":"💼","description":"工资、辞退、工伤等劳动问题","scenarios":[{"id":"wage-arrear","name":"拖欠工资","description":"老板/公司拖欠工资不发","questions":[{"id":"q1","label":"是否有签劳动合同？","type":"radio","options":["有签","没签"]},{"id":"q2","label":"在单位工作了多久？","type":"radio","options":["不到3个月","3个月-1年","1年以上"]},{"id":"q3","label":"是否有工资单/银行流水/微信转账记录？","type":"radio","options":["都有","部分有","完全没有"]}],"plan":{"title":"拖欠工资维权方案","steps":[{"order":1,"title":"收集证据","detail":"收集劳动合同、工资条、考勤记录、微信聊天记录、银行流水等能证明劳动关系和欠薪事实的材料。没有劳动合同的，工牌、工作服、同事证言也行。"},{"order":2,"title":"与单位协商","detail":"明确向单位提出要求，最好用微信或邮件等可以留痕的方式。"},{"order":3,"title":"劳动监察大队投诉","detail":"拨打12333或到当地人社局劳动监察大队投诉，这是最快最省钱的途径。"},{"order":4,"title":"劳动仲裁","detail":"劳动仲裁免费，向单位所在地或劳动合同履行地劳动仲裁委申请。注意：仲裁时效为1年！"},{"order":5,"title":"法院起诉","detail":"对仲裁结果不服，可在收到裁决书15日内向法院起诉。"}],"laws":[{"name":"劳动合同法第85条","explain":"用人单位未及时足额支付报酬的，劳动行政部门责令限期支付，逾期加付50%-100%赔偿金"},{"name":"劳动争议调解仲裁法第27条","explain":"劳动争议申请仲裁的时效为1年，从知道或应当知道权利被侵害之日起算"}],"pitfalls":[{"title":"错过仲裁时效","detail":"要在知道被欠薪起1年内申请仲裁！很多人因为等公司有钱了再说而错过时效。"},{"title":"口头承诺","detail":"老板口头说下周发下个月给，不要轻信。要求写书面承诺或录音。"}],"contacts":[{"name":"劳动保障热线","detail":"12333（全国统一）"},{"name":"法律援助热线","detail":"12348（全国统一）"}],"lawyerType":"劳动争议律师","templateIds":["labor-complaint"]}},{"id":"layoff","name":"被辞退/裁员","description":"无理由辞退、裁员补偿纠纷","questions":[{"id":"q1","label":"辞退理由是什么？","type":"radio","options":["无理由辞退","以能力不足为由","公司裁员/倒闭","协商离职但补偿不合理"]},{"id":"q2","label":"在公司工作多久？","type":"radio","options":["试用期内","不到半年","半年-2年","2年以上"]}],"plan":{"title":"被辞退维权方案","steps":[{"order":1,"title":"确认辞退是否合法","detail":"违法解除劳动合同的情形：无正当理由、未提前30天通知、在医疗期/孕期/工伤期间辞退等。"},{"order":2,"title":"计算应得补偿","detail":"合法裁员：N（每满1年1个月工资）；违法解除：2N（2倍经济补偿）。"},{"order":3,"title":"保留证据","detail":"不要主动写辞职信！收集辞退通知、工资单、劳动合同、工作证、考勤记录等。"},{"order":4,"title":"申请劳动仲裁","detail":"向劳动仲裁委申请，要求支付经济补偿金或赔偿金。"}],"laws":[{"name":"劳动合同法第47条","explain":"经济补偿按每满1年支付1个月工资，6个月以上不满1年按1年算，不满6个月支付半个月"},{"name":"劳动合同法第87条","explain":"违法解除或终止劳动合同，按经济补偿标准的2倍支付赔偿金"}],"pitfalls":[{"title":"不要主动写辞职信","detail":"单位让你自愿离职千万不要答应，否则失去补偿资格！"},{"title":"录音取证","detail":"与HR或领导谈话时打开手机录音，记录辞退的理由和过程。"}],"contacts":[{"name":"劳动仲裁委","detail":"到单位所在地劳动人事争议仲裁委员会申请，免费"}],"lawyerType":"劳动争议律师"}}]},"housing":{"id":"housing","name":"住房纠纷","icon":"🏠","description":"租房、物业、房屋买卖等纠纷","scenarios":[{"id":"rent-deposit","name":"租房押金不退","description":"退租时房东无理由扣押金","questions":[{"id":"q1","label":"是否有签租房合同？","type":"radio","options":["有书面合同","只有口头约定"]},{"id":"q2","label":"房东扣押金的理由是什么？","type":"radio","options":["说房屋有损坏","说没提前通知退租","无理由就是不退","已联系不上房东"]}],"plan":{"title":"租房押金维权方案","steps":[{"order":1,"title":"检查合同条款","detail":"仔细看合同中关于押金退还的条款，确认退还条件和时间。"},{"order":2,"title":"拍照留证","detail":"退租时对房屋各个角落拍照录像，证明房屋状况良好，清洁到位。"},{"order":3,"title":"书面催告","detail":"给房东发微信/短信，明确要求退还押金并给出期限，保留沟通记录。"},{"order":4,"title":"社区调解","detail":"联系小区物业、社区居委会或街道司法所进行调解。"},{"order":5,"title":"起诉","detail":"去法院立案庭起诉，押金纠纷属于小额诉讼，审理快。"}],"laws":[{"name":"民法典第720条","explain":"承租人按照约定或租赁物性质使用致损耗的，不承担责任。正常磨损不能扣押金"},{"name":"民法典第708条","explain":"出租人应在租赁期满后及时退还押金"}],"pitfalls":[{"title":"入住时没拍照","detail":"入住当天就要对房屋状况拍照录像发给房东确认，退租时才不会扯皮。"}],"contacts":[{"name":"当地住建委","detail":"可投诉黑中介和违规房东"}],"lawyerType":"房产纠纷律师"}}]},"family":{"id":"family","name":"婚姻家庭","icon":"👨‍👩‍👧","description":"离婚、抚养权、继承等家庭纠纷","scenarios":[{"id":"divorce","name":"离婚咨询","description":"协议离婚或诉讼离婚相关问题","questions":[{"id":"q1","label":"双方是否同意离婚？","type":"radio","options":["都同意","一方不同意"]},{"id":"q2","label":"是否有子女？","type":"radio","options":["有未成年子女","子女已成年","无子女"]},{"id":"q3","label":"主要争议是什么？","type":"radio","options":["财产分割","子女抚养权","都有争议","没有争议"]}],"plan":{"title":"离婚咨询方案","steps":[{"order":1,"title":"选择离婚方式","detail":"双方同意且对财产/子女无争议：协议离婚，到民政局办理（30天冷静期）。一方不同意或有争议：诉讼离婚。"},{"order":2,"title":"准备材料","detail":"协议离婚：身份证、户口本、结婚证、离婚协议书。诉讼离婚：除上述外+财产证明、收入证明、感情破裂证据。"},{"order":3,"title":"财产分割原则","detail":"婚后所得为共同财产，原则上平均分割。婚前财产归各自所有。隐藏/转移财产的可以少分或不分。"},{"order":4,"title":"子女抚养","detail":"2岁以下一般随母亲；8岁以上需征求子女意见。抚养费一般为对方月收入的20%-30%。"}],"laws":[{"name":"民法典第1077条","explain":"协议离婚有30天冷静期，期满后30天内双方应亲自申请发离婚证"},{"name":"民法典第1084条","explain":"离婚后子女抚养：不满2岁随母亲，满8岁尊重子女意愿"}],"pitfalls":[{"title":"冷静期撤回","detail":"30天冷静期内任何一方都可以撤回离婚申请，注意防范对方在冷静期转移财产。"}],"contacts":[{"name":"当地民政局婚姻登记处","detail":"办理协议离婚"}],"lawyerType":"婚姻家事律师"}}]}}}; }
+
+
+function getDefaultLawyers() {
+  return [
+    { id:1, name:'王明远', firm:'北京中闻律师事务所', city:'北京', district:'朝阳区', province:'北京', experience:'15年', fields:['消费维权','合同纠纷','公司法律'], cases:'代理某知名电商平台消费者集体诉讼案，为300余名消费者追回损失200余万元', education:'中国政法大学 法学硕士', verified:true, photo:'' },
+    { id:2, name:'李芳', firm:'上海锦天城律师事务所', city:'上海', district:'浦东新区', province:'上海', experience:'12年', fields:['劳动争议','工伤赔偿','社保纠纷'], cases:'代理多起大型企业集体劳动争议案，累计为劳动者追回欠薪及补偿金超500万元', education:'华东政法大学 法学学士', verified:true, photo:'' },
+    { id:3, name:'张伟', firm:'广州金鹏律师事务所', city:'广州', district:'天河区', province:'广东', experience:'10年', fields:['房产纠纷','合同纠纷','婚姻家事'], cases:'成功代理数十起商品房买卖合同纠纷，为购房者挽回损失近千万', education:'中山大学 法律硕士', verified:true, photo:'' },
+    { id:4, name:'陈丽华', firm:'深圳华商律师事务所', city:'深圳', district:'福田区', province:'广东', experience:'18年', fields:['知识产权','商标侵权','专利纠纷'], cases:'代理某知名科技公司专利侵权案一审胜诉，判决赔偿额1200万元', education:'北京大学 知识产权法硕士', verified:true, photo:'' },
+    { id:5, name:'刘建国', firm:'成都泰和泰律师事务所', city:'成都', district:'武侯区', province:'四川', experience:'8年', fields:['刑事辩护','交通事故','人身损害'], cases:'成功为多起交通肇事案件当事人争取到缓刑或免于起诉', education:'西南政法大学 刑法学硕士', verified:false, photo:'' },
+    { id:6, name:'赵雪', firm:'杭州天册律师事务所', city:'杭州', district:'西湖区', province:'浙江', experience:'7年', fields:['网络侵权','数据隐私','电商合规'], cases:'代理多起网络名誉权侵权案，包括某知名博主被网暴维权案', education:'浙江大学 法学学士', verified:true, photo:'' },
+    { id:7, name:'周明辉', firm:'武汉忠三律师事务所', city:'武汉', district:'洪山区', province:'湖北', experience:'14年', fields:['建筑工程','房地产','土地纠纷'], cases:'代理多个楼盘烂尾楼业主维权，成功推动政府介入复工', education:'武汉大学 民商法硕士', verified:true, photo:'' },
+    { id:8, name:'吴晓燕', firm:'南京法德东恒律师事务所', city:'南京', district:'鼓楼区', province:'江苏', experience:'9年', fields:['婚姻家事','遗产继承','抚养权'], cases:'代理多起高净值人士离婚财产分割案，涉及跨境资产处理', education:'南京大学 法学硕士', verified:true, photo:'' }
+  ];
+}
+
+function getDefaultTemplates() {
+  return [
+    { id:'complaint-letter', name:'消费者投诉函', category:'consumer', icon:'📝', description:'向商家或12315提交的正式投诉文书', content:'消费投诉函\n\n投诉人：___________\n联系电话：___________\n通讯地址：___________\n\n被投诉方名称：___________\n被投诉方地址：___________\n\n投诉请求：\n1. 要求退还货款人民币___________元；\n2. 按照《消费者权益保护法》第55条赔偿三倍货款，计人民币___________元；\n3. 赔偿维权产生的合理费用___________元。\n\n事实与理由：\n本人于______年___月___日通过___________（电商平台/实体店）向被投诉方购买了___________（商品名称），支付货款人民币___________元（订单编号：___________）。\n\n收到商品后发现存在以下问题：\n________________________________________________________________________\n\n本人于______年___月___日联系被投诉方要求___________，被投诉方回复：___________，至今未解决问题。\n\n根据《消费者权益保护法》第55条之规定："经营者提供商品或者服务有欺诈行为的，应当按照消费者的要求增加赔偿其受到的损失，增加赔偿的金额为消费者购买商品的价款或者接受服务的费用的三倍；增加赔偿的金额不足五百元的，为五百元。"\n\n被投诉方的行为已构成欺诈，依法应承担退一赔三的民事责任。\n\n此致\n___________市场监督管理局 / 全国12315平台\n\n投诉人（签名）：___________\n日期：______年___月___日\n\n附件：\n1. 购物凭证（订单截图/发票）\n2. 商品问题照片/视频\n3. 与商家沟通记录\n4. 其他证据材料' },
+    { id:'labor-complaint', name:'劳动仲裁申请书', category:'labor', icon:'📋', description:'向劳动仲裁委员会提交的仲裁申请文书', content:'劳动仲裁申请书\n\n申请人：___________\n性别：___　出生日期：______年___月___日\n身份证号：___________\n联系电话：___________\n通讯地址：___________\n\n被申请人（单位）：___________\n法定代表人：___________\n单位地址：___________\n联系电话：___________\n\n仲裁请求：\n1. 要求被申请人支付拖欠工资人民币___________元（______年___月至______年___月）；\n2. 要求被申请人支付经济补偿金/赔偿金人民币___________元；\n3. 要求被申请人补缴社会保险（______年___月至______年___月）；\n4. 要求被申请人支付未签劳动合同的双倍工资差额人民币___________元。\n\n事实与理由：\n本人于______年___月___日入职被申请人单位，担任___________（岗位），约定月工资人民币___________元。\n\n______年___月起，被申请人开始拖欠工资，累计拖欠___________个月，共计人民币___________元。\n\n______年___月___日，被申请人以___________为由将申请人辞退（或被申请人提出解除劳动关系）。\n\n在职期间，被申请人存在以下违法行为：\n1. □ 拖欠劳动报酬\n2. □ 未依法缴纳社会保险\n3. □ 未签订书面劳动合同\n4. □ 违法解除劳动合同\n5. □ 未支付加班费\n6. □ 其他：___________\n\n根据《劳动合同法》等相关法律规定，被申请人的行为已严重侵害申请人的合法权益，特申请仲裁。\n\n此致\n___________劳动人事争议仲裁委员会\n\n申请人（签名）：___________\n日期：______年___月___日\n\n附件：\n1. 身份证复印件\n2. 劳动合同/工作证明\n3. 工资银行流水/微信转账记录\n4. 考勤记录\n5. 辞退通知/解除劳动关系证明\n6. 其他证据材料' },
+    { id:'rent-complaint', name:'租房纠纷投诉函', category:'housing', icon:'🏠', description:'向住建部门投诉黑中介或房东的函件', content:'租房纠纷投诉函\n\n投诉人：___________\n联系电话：___________\n身份证号：___________\n\n被投诉方：\n□ 个人房东  姓名：___________  电话：___________\n□ 中介公司  名称：___________  地址：___________\n\n租赁房屋地址：___________\n租赁期间：______年___月___日至______年___月___日\n月租金：人民币___________元\n押金：人民币___________元\n\n纠纷事项：\n________________________________________________________________________\n\n具体诉求：\n________________________________________________________________________\n\n相关证据：\n1. 租赁合同（有/无）\n2. 押金收据（有/无）\n3. 房屋照片/视频（有/无）\n4. 微信/短信沟通记录（有/无）\n5. 其他：___________\n\n此致\n___________住房和城乡建设委员会\n\n投诉人（签名）：___________\n日期：______年___月___日' },
+    { id:'divorce-agreement', name:'离婚协议书模板', category:'family', icon:'💔', description:'协议离婚使用的标准协议书', content:'离婚协议书\n\n男方：___________，______年___月___日出生\n身份证号：___________\n住址：___________\n\n女方：___________，______年___月___日出生\n身份证号：___________\n住址：___________\n\n双方于______年___月___日在___________民政局登记结婚，结婚证号为：___________。现因___________，经协商一致，自愿离婚，达成如下协议：\n\n一、自愿离婚\n双方自愿解除婚姻关系。\n\n二、子女抚养\n1. 双方育有____子/女，姓名：___________，______年___月___日出生。\n2. 子女由______方抚养，______方每月支付抚养费人民币___________元，于每月___日前支付，直至子女年满18周岁止。\n3. ______方享有探视权，具体方式为：___________。\n4. 子女的教育费、医疗费等大额支出，双方各承担______%。\n\n三、财产分割\n1. 房产：位于___________的房屋归______方所有。\n2. 车辆：___________牌汽车（车牌号：___________）归______方所有。\n3. 存款：双方名下银行存款及理财共计约___________元，分割方案：___________。\n4. 债务：婚姻期间共同债务___________元，由______方承担___________元，______方承担___________元。\n5. 其他财产：___________。\n\n四、其他约定\n________________________________________________________________________\n\n本协议一式三份，双方各执一份，婚姻登记机关存档一份。\n\n男方（签名）：___________　　女方（签名）：___________\n日期：______年___月___日　　　日期：______年___月___日' },
+    { id:'legal-demand-letter', name:'律师函/维权函', category:'consumer', icon:'⚖️', description:'正式的法律维权通知函模板', content:'律师函 / 维权告知函\n\n致：___________（公司/个人）\n\n发函人：___________\n联系电话：___________\n通讯地址：___________\n\n关于___________事宜的正式函告\n\n___________：\n\n就___________（事项），现正式函告如下：\n\n一、基本事实\n________________________________________________________________________\n\n二、法律分析\n根据《___________》第___条之规定：___________。\n贵方行为已构成___________。\n\n三、具体要求\n请贵方在收到本函后___日内：\n1. ___________\n2. ___________\n3. ___________\n\n四、法律后果\n如贵方逾期未履行上述义务，我方将采取以下法律措施：\n1. 向___________（行政机关）投诉举报；\n2. 向___________人民法院提起诉讼；\n3. 申请财产保全___________元。\n届时贵方除需承担上述民事责任外，还将承担诉讼费、保全费、律师费等全部维权费用。\n\n望慎重考虑，尽快履行！\n\n此致\n\n发函人（签名）：___________\n日期：______年___月___日\n\n（本函通过□微信/□短信/□快递/□邮件发送，发送记录已保留作为证据）' }
+  ];
+}
+
+function getDefaultProvisions() {
+  return [
+    { id:1, branch:'civil', subcategory:'contract', lawName:'中华人民共和国民法典', article:'第588条', original:'当事人既约定违约金，又约定定金的，一方违约时，对方可以选择适用违约金或者定金条款。定金不足以弥补一方违约造成的损失的，对方可以请求赔偿超过定金数额的损失。', explanation:'如果合同里既写了违约金又收了定金，守约方只能二选一，不能同时主张。但如果定金太少不够赔，可以要求补足损失。', keywords:['违约金','定金','违约','合同'], hierarchy:'law', country:'CN' },
+    { id:2, branch:'civil', subcategory:'tort', lawName:'中华人民共和国民法典', article:'第1165条', original:'行为人因过错侵害他人民事权益造成损害的，应当承担侵权责任。依照法律规定推定行为人有过错，其不能证明自己没有过错的，应当承担侵权责任。', explanation:'侵害别人权益有过错就要赔偿。有些情况下法律直接推定你有过错，除非你能证明自己没错，否则要赔。', keywords:['侵权','过错','赔偿'], hierarchy:'law', country:'CN' },
+    { id:3, branch:'civil', subcategory:'contract', lawName:'中华人民共和国民法典', article:'第577条', original:'当事人一方不履行合同义务或者履行合同义务不符合约定的，应当承担继续履行、采取补救措施或者赔偿损失等违约责任。', explanation:'签了合同不履行，或者履行不到位，就要承担违约责任，包括继续做、补救或赔钱。', keywords:['合同','违约','履行'], hierarchy:'law', country:'CN' },
+    { id:4, branch:'consumer', subcategory:'consumer', lawName:'中华人民共和国消费者权益保护法', article:'第55条', original:'经营者提供商品或者服务有欺诈行为的，应当按照消费者的要求增加赔偿其受到的损失，增加赔偿的金额为消费者购买商品的价款或者接受服务的费用的三倍；增加赔偿的金额不足五百元的，为五百元。法律另有规定的，依照其规定。', explanation:'商家欺诈要退一赔三！赔的钱不够500元时按500元算。这是消费者最常用的维权武器。', keywords:['欺诈','退一赔三','消费者'], hierarchy:'law', country:'CN' },
+    { id:5, branch:'labor', subcategory:'labor', lawName:'中华人民共和国劳动合同法', article:'第85条', original:'用人单位有下列情形之一的，由劳动行政部门责令限期支付劳动报酬、加班费或者经济补偿；劳动报酬低于当地最低工资标准的，应当支付其差额部分；逾期不支付的，责令用人单位按应付金额百分之五十以上百分之一百以下的标准向劳动者加付赔偿金', explanation:'公司不按时发工资或不给加班费，劳动部门可以责令限期支付，逾期还要加付50%-100%的赔偿金。', keywords:['工资','加班费','赔偿金','劳动'], hierarchy:'law', country:'CN' },
+    { id:6, branch:'labor', subcategory:'labor', lawName:'中华人民共和国劳动合同法', article:'第87条', original:'用人单位违反本法规定解除或者终止劳动合同的，应当依照本法第四十七条规定的经济补偿标准的二倍向劳动者支付赔偿金。', explanation:'公司违法辞退你，要赔双倍！比如你干了5年合法辞退赔5个月工资，违法的话就赔10个月。', keywords:['辞退','违法解除','赔偿金','2N'], hierarchy:'law', country:'CN' },
+    { id:7, branch:'civil', subcategory:'contract', lawName:'中华人民共和国民法典', article:'第708条', original:'出租人应当按照约定将租赁物交付承租人，并在租赁期限内保持租赁物符合约定的用途。', explanation:'房东要按合同把房子交给租客，租期内还要保证房子能用。押金应当在退租后及时退还。', keywords:['租赁','房东','出租','房屋'], hierarchy:'law', country:'CN' },
+    { id:8, branch:'civil', subcategory:'family', lawName:'中华人民共和国民法典', article:'第1077条', original:'自婚姻登记机关收到离婚登记申请之日起三十日内，任何一方不愿意离婚的，可以向婚姻登记机关撤回离婚登记申请。前款规定期限届满后三十日内，双方应当亲自到婚姻登记机关申请发给离婚证；未申请的，视为撤回离婚登记申请。', explanation:'协议离婚有30天冷静期，任何一方在冷静期内都可以反悔撤回。冷静期过后30天内必须两人一起去领证。', keywords:['离婚','冷静期','撤回'], hierarchy:'law', country:'CN' },
+    { id:9, branch:'civil', subcategory:'tort', lawName:'中华人民共和国民法典', article:'第1194条', original:'网络用户、网络服务提供者利用网络侵害他人民事权益的，应当承担侵权责任。法律另有规定的，依照其规定。', explanation:'在网上被人辱骂、造谣、曝光隐私，可以告对方要求删帖、道歉、赔偿。平台在接到通知后不处理的要承担连带责任。', keywords:['网络侵权','名誉权','隐私','网暴'], hierarchy:'law', country:'CN' },
+    { id:10, branch:'consumer', subcategory:'consumer', lawName:'中华人民共和国电子商务法', article:'第38条', original:'电子商务平台经营者知道或者应当知道平台内经营者销售的商品或者提供的服务不符合保障人身、财产安全的要求，或者有其他侵害消费者合法权益行为，未采取必要措施的，依法与该平台内经营者承担连带责任。', explanation:'电商平台明知商家卖假货而不处理，跟商家承担连带责任，消费者可以找平台赔！', keywords:['电商','平台','连带责任'], hierarchy:'law', country:'CN' }
+  ];
+}
+
+// ==================== INIT ====================
+async function init() {
+  var d = document.getElementById('diag-status');
+  if (d) { d.textContent = '✅ init() 已调用 · 绑定事件中...'; d.style.background = '#2e7d32'; }
+
+  // Tab bar clicks
+  $$('.tab-item').forEach(ti => {
+    ti.addEventListener('click', () => {
+      const tab = ti.dataset.tab;
+      navigateTo(tab);
+      if (tab === 'wizard') initWizard();
+      else if (tab === 'lawyer') renderLawyers();
+      else if (tab === 'template') renderTemplates();
+      else if (tab === 'ai') initAI();
+      else if (tab === 'calc') initCalc();
+      else if (tab === 'faq') renderFAQ();
+      else if (tab === 'provisions') renderProvisions();
+      else if (tab === 'glossary') renderGlossary();
+    });
+  });
+
+  // Entry card clicks
+  $$('.entry-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const tab = card.dataset.nav;
+      if (tab) navigateTo(tab);
+      if (tab === 'wizard') initWizard();
+      else if (tab === 'lawyer') renderLawyers();
+      else if (tab === 'template') renderTemplates();
+      else if (tab === 'ai') initAI();
+      else if (tab === 'calc') initCalc();
+      else if (tab === 'faq') renderFAQ();
+      else if (tab === 'provisions') renderProvisions();
+      else if (tab === 'glossary') renderGlossary();
+    });
+  });
+
+  // Quick action clicks
+  $$('.quick-action').forEach(qa => {
+    qa.addEventListener('click', () => {
+      const tab = qa.dataset.nav;
+      if (tab) navigateTo(tab);
+      if (tab === 'calc') initCalc();
+      else if (tab === 'faq') renderFAQ();
+      else if (tab === 'provisions') renderProvisions();
+      else if (tab === 'glossary') renderGlossary();
+    });
+  });
+
+  // Care mode toggle
+  const careToggle = $('#careToggle');
+  const savedCareMode = localStorage.getItem('legal_app_care_mode') === 'true';
+  if (savedCareMode) {
+    document.body.classList.add('care-mode');
+    careToggle.textContent = '👁‍🗨';
+  }
+  careToggle.addEventListener('click', () => {
+    const isCare = document.body.classList.toggle('care-mode');
+    localStorage.setItem('legal_app_care_mode', isCare);
+    careToggle.textContent = isCare ? '👁‍🗨' : '👁';
+    showToast(isCare ? '已切换关怀版（大字版）' : '已切换标准版');
+  });
+
+  // Modal close
+  $('#modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Load data
+  var d2 = document.getElementById('diag-status');
+  if (d2) { d2.textContent = '⏳ 加载数据中...'; d2.style.background = '#f39c12'; }
+
+  try {
+    await loadAllData();
+    if (d2) { d2.textContent = '✅ 数据已加载 · 初始化页面...'; d2.style.background = '#2e7d32'; }
+  } catch(e) {
+    if (d2) { d2.textContent = '❌ 数据加载失败: ' + e.message; d2.style.background = '#c0392b'; }
+  }
+
+  // Initialize visible page + bind all UI controls
+  try {
+    initWizard();
+    bindWizardButtons();
+    bindLawyerButtons();
+    bindAIButtons();
+    bindCalcButtons();
+    bindProvisionSearch();
+    if (d2) { d2.textContent = '✅ 全部就绪 · ' + $$('.tab-item').length + '个标签 · ' + $$('.entry-card').length + '个入口'; d2.style.background = '#27ae60'; }
+    // Hide diag after 3s
+    setTimeout(function() { if (d2) d2.style.display = 'none'; }, 3000);
+  } catch(e) {
+    if (d2) { d2.textContent = '❌ 初始化失败: ' + e.message; d2.style.background = '#c0392b'; }
+  }
+}
+
+// ==================== MODAL ====================
+function openModal(html) {
+  $('#modalContent').innerHTML = html;
+  $('#modalOverlay').classList.add('show');
+}
+function closeModal() {
+  $('#modalOverlay').classList.remove('show');
+}
+
+// ==================== WIZARD ====================
+function initWizard() {
+  if (!knowledgeBase) return;
+  wizardState = { category: null, scenario: null, answers: {} };
+  switchWizPanel(1);
+  renderCategoryCards();
+}
+
+function renderCategoryCards() {
+  const grid = $('#categoryGrid');
+  if (!grid || !knowledgeBase) return;
+  const cats = knowledgeBase.categories;
+  grid.innerHTML = Object.values(cats).map(c => `
+    <div class="category-card" data-cat-id="${c.id}" onclick="selectWizCategory('${c.id}')">
+      <div class="cat-icon">${c.icon}</div>
+      <div class="cat-name">${c.name}</div>
+      <div class="cat-desc">${c.description}</div>
+    </div>
+  `).join('');
+}
+
+function selectWizCategory(catId) {
+  wizardState.category = knowledgeBase.categories[catId];
+  wizardState.scenario = null;
+  wizardState.answers = {};
+  renderScenarioCards();
+  switchWizPanel(2);
+}
+
+function renderScenarioCards() {
+  const cat = wizardState.category;
+  if (!cat) return;
+  $('#wizScenarioTitle').textContent = cat.icon + ' ' + cat.name + ' — 请选择场景';
+  $('#scenarioList').innerHTML = cat.scenarios.map(s => `
+    <div class="scenario-item" onclick="selectWizScenario('${s.id}')">
+      <div class="si-icon">📋</div>
+      <div class="si-info">
+        <div class="si-name">${s.name}</div>
+        <div class="si-desc">${s.description}</div>
+      </div>
+      <div class="si-arrow">→</div>
+    </div>
+  `).join('');
+}
+
+function selectWizScenario(scenarioId) {
+  wizardState.scenario = wizardState.category.scenarios.find(s => s.id === scenarioId);
+  wizardState.answers = {};
+  renderQuestions();
+  switchWizPanel(3);
+}
+
+function renderQuestions() {
+  const sc = wizardState.scenario;
+  if (!sc) return;
+  $('#wizQuestionTitle').textContent = sc.name + ' — 请回答以下问题';
+  $('#questionForm').innerHTML = sc.questions.map((q, qi) => `
+    <div class="question-block" id="qBlock${qi}">
+      <label class="q-label">${q.label}</label>
+      <div class="option-group">
+        ${q.options.map((opt, oi) => `
+          <div class="option-item" id="q${qi}o${oi}" onclick="selectOption('${q.id}','${qi}',${oi},'${q.type}','${escapeAttr(opt)}')">
+            <div class="oi-radio"></div>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeAttr(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+function selectOption(qId, qi, oi, type, value) {
+  if (type === 'radio') {
+    const items = document.querySelectorAll(`#qBlock${qi} .option-item`);
+    items.forEach(it => it.classList.remove('selected'));
+    const target = document.getElementById(`q${qi}o${oi}`);
+    if (target) target.classList.add('selected');
+    wizardState.answers[qId] = value;
+  } else if (type === 'checkbox') {
+    const target = document.getElementById(`q${qi}o${oi}`);
+    if (target) target.classList.toggle('selected');
+    if (!wizardState.answers[qId]) wizardState.answers[qId] = [];
+    const arr = wizardState.answers[qId];
+    if (arr.includes(value)) {
+      arr.splice(arr.indexOf(value), 1);
+    } else {
+      arr.push(value);
+    }
+  }
+}
+
+function switchWizPanel(n) {
+  for (let i = 1; i <= 4; i++) {
+    const panel = $(`#wizPanel${i}`);
+    if (panel) panel.classList.toggle('active', i === n);
+  }
+  // Update step indicators
+  $$('.wizard-step').forEach(step => {
+    const s = parseInt(step.dataset.step);
+    step.classList.remove('active', 'done');
+    if (s === n) step.classList.add('active');
+    if (s < n) step.classList.add('done');
+  });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function bindWizardButtons() {
+  const genBtn = $('#generatePlan');
+  if (genBtn) {
+    genBtn.addEventListener('click', () => {
+      const sc = wizardState.scenario;
+      if (!sc) return;
+
+      let allAnswered = true;
+      sc.questions.forEach((q, qi) => {
+        const ans = wizardState.answers[q.id];
+        if (!ans || (Array.isArray(ans) && ans.length === 0)) {
+          allAnswered = false;
+          const block = $(`#qBlock${qi}`);
+          if (block) {
+            block.style.border = '2px solid #c0392b';
+            block.style.borderRadius = '8px';
+            block.style.padding = '8px';
+            setTimeout(() => { block.style.border = ''; block.style.padding = ''; }, 2000);
+          }
+        }
+      });
+
+      if (!allAnswered) {
+        alert('请回答所有问题后再生成方案');
+        return;
+      }
+
+      renderPlan(sc);
+      switchWizPanel(4);
+    });
+  }
+
+  $('#wizBack1')?.addEventListener('click', () => {
+    wizardState.category = null; wizardState.scenario = null; wizardState.answers = {};
+    renderCategoryCards(); switchWizPanel(1);
+  });
+  $('#wizBack2')?.addEventListener('click', () => {
+    wizardState.scenario = null; wizardState.answers = {};
+    renderScenarioCards(); switchWizPanel(2);
+  });
+  $('#wizRestart')?.addEventListener('click', () => {
+    wizardState = { category: null, scenario: null, answers: {} };
+    renderCategoryCards(); switchWizPanel(1);
+  });
+}
+
+function renderPlan(scenario) {
+  const plan = scenario.plan;
+  let html = '';
+
+  html += `<h3 style="text-align:center;font-size:var(--font-xl);margin-bottom:16px;">📋 ${plan.title}</h3>`;
+
+  // Action steps
+  html += '<div class="plan-section"><h4>📌 行动计划</h4>';
+  plan.steps.forEach(s => {
+    html += `<div class="action-step"><div class="as-num">${s.order}</div><div><strong>${s.title}</strong><p style="font-size:var(--font-sm);color:var(--text-secondary);">${s.detail}</p></div></div>`;
+  });
+  html += '</div>';
+
+  // Laws
+  if (plan.laws && plan.laws.length) {
+    html += '<div class="plan-section"><h4>📜 相关法律条文</h4>';
+    plan.laws.forEach(l => {
+      html += `<div class="law-tag"><strong>${l.name}</strong><br><span style="font-size:var(--font-xs);">${l.explain}</span></div>`;
+    });
+    html += '</div>';
+  }
+
+  // Pitfalls
+  if (plan.pitfalls && plan.pitfalls.length) {
+    html += '<div class="plan-section"><h4>⚠️ 陷阱提醒</h4>';
+    plan.pitfalls.forEach(p => {
+      html += `<div class="warning-tag"><strong>${p.title}</strong><br><span style="font-size:var(--font-xs);">${p.detail}</span></div>`;
+    });
+    html += '</div>';
+  }
+
+  // Contacts
+  if (plan.contacts && plan.contacts.length) {
+    html += '<div class="plan-section"><h4>📞 联系方式</h4>';
+    plan.contacts.forEach(c => {
+      html += `<div style="font-size:var(--font-sm);margin-bottom:4px;"><strong>${c.name}</strong>：${c.detail}</div>`;
+    });
+    html += '</div>';
+  }
+
+  // Lawyer
+  if (plan.lawyerType) {
+    html += `<div class="plan-section"><h4>👨‍⚖️ 建议律师类型</h4><p style="font-size:var(--font-sm);">${plan.lawyerType}</p><button class="btn btn-outline btn-sm" onclick="navigateTo('lawyer');renderLawyers();">去查找此类律师 →</button></div>`;
+  }
+
+  $('#planResult').innerHTML = html;
+}
+
+// ==================== LAWYER SEARCH ====================
+function renderLawyers() {
+  if (!lawyersData.length) { $('#lawyerList').innerHTML = '<div class="empty-state"><div class="es-icon">👨‍⚖️</div><p>律师数据加载中...</p></div>'; return; }
+  renderLawyerFilters();
+  renderLawyerList();
+}
+
+function renderLawyerFilters() {
+  const fields = ['全部', ...new Set(lawyersData.flatMap(l => l.fields || []))];
+  $('#lawyerFieldFilters').innerHTML = fields.map(f => `
+    <div class="filter-chip${lawyerFilters.field === f ? ' active' : ''}" onclick="setLawyerFilter('field','${f}')">${f}</div>
+  `).join('');
+
+  const regions = ['全部', ...new Set(lawyersData.map(l => l.province || l.city || '').filter(Boolean))];
+  $('#lawyerRegionFilters').innerHTML = regions.map(r => `
+    <div class="filter-chip${lawyerFilters.region === r ? ' active' : ''}" onclick="setLawyerFilter('region','${r}')">${r}</div>
+  `).join('');
+}
+
+function setLawyerFilter(type, value) {
+  lawyerFilters[type] = value;
+  lawyerPage = 1;
+  renderLawyerFilters();
+  renderLawyerList();
+}
+
+function renderLawyerList() {
+  let filtered = lawyersData;
+  const s = lawyerFilters.search.toLowerCase();
+  if (s) filtered = filtered.filter(l => (l.name||'').includes(s) || (l.firm||'').includes(s) || (l.fields||[]).some(f => f.includes(s)));
+  if (lawyerFilters.field !== '全部') filtered = filtered.filter(l => (l.fields||[]).includes(lawyerFilters.field));
+  if (lawyerFilters.region !== '全部') filtered = filtered.filter(l => (l.province||'') === lawyerFilters.region || (l.city||'') === lawyerFilters.region);
+
+  const pageSize = 10;
+  const totalPages = Math.ceil(filtered.length / pageSize);
+  const start = (lawyerPage - 1) * pageSize;
+  const pageData = filtered.slice(start, start + pageSize);
+
+  if (!pageData.length) {
+    $('#lawyerList').innerHTML = '<div class="empty-state"><div class="es-icon">🔍</div><p>没有找到匹配的律师</p></div>';
+  } else {
+    $('#lawyerList').innerHTML = pageData.map(l => `
+      <div class="lawyer-card" onclick="openLawyerDetail(${l.id})">
+        <div class="lawyer-avatar">${l.photo ? `<img src="${l.photo}" alt="${l.name}">` : (l.name||'律').charAt(0)}</div>
+        <div class="lawyer-info">
+          <div class="lw-name">${l.name} ${l.verified ? '✅' : ''}</div>
+          <div class="lw-firm">${l.firm||''} · ${l.experience||''}</div>
+          <div class="lw-tags">${(l.fields||[]).slice(0,4).map(f => `<span class="lw-tag">${f}</span>`).join('')}</div>
+          <div class="lw-meta">📍 ${l.city||''}${l.district||''}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Pagination
+  $('#lawyerPagination').innerHTML = `
+    <button ${lawyerPage <= 1 ? 'disabled' : ''} onclick="lawyerPage--;renderLawyerList();window.scrollTo(0,0);">上一页</button>
+    <span style="font-size:var(--font-sm);">${lawyerPage}/${totalPages || 1}</span>
+    <button ${lawyerPage >= totalPages ? 'disabled' : ''} onclick="lawyerPage++;renderLawyerList();window.scrollTo(0,0);">下一页</button>
+  `;
+}
+
+function openLawyerDetail(id) {
+  const l = lawyersData.find(la => la.id === id);
+  if (!l) return;
+  openModal(`
+    <div class="modal-handle"></div>
+    <div style="text-align:center;margin-bottom:12px;">
+      <div class="lawyer-avatar" style="width:70px;height:70px;margin:0 auto;font-size:30px;">${l.photo ? `<img src="${l.photo}" alt="${l.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : (l.name||'').charAt(0)}</div>
+      <h3 style="margin-top:8px;">${l.name} ${l.verified ? '✅' : ''}</h3>
+      <p style="color:var(--text-muted);font-size:var(--font-sm);">${l.firm||''}</p>
+      <p style="color:var(--text-secondary);font-size:var(--font-sm);">📍 ${[l.province,l.city,l.district].filter(Boolean).join(' ')} · ${l.experience||''}</p>
+    </div>
+    <div style="margin-bottom:8px;"><strong>擅长领域：</strong></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${(l.fields||[]).map(f => `<span class="lw-tag">${f}</span>`).join('')}</div>
+    ${l.cases ? `<div style="margin-bottom:12px;"><strong>代表案例：</strong><p style="font-size:var(--font-sm);color:var(--text-secondary);">${l.cases}</p></div>` : ''}
+    ${l.education ? `<div style="margin-bottom:12px;"><strong>教育背景：</strong>${l.education}</div>` : ''}
+    <button class="btn btn-outline btn-sm" onclick="closeModal()" style="width:100%;margin-top:8px;">关闭</button>
+  `);
+}
+
+function bindLawyerButtons() {
+  $('#addLawyerBtn')?.addEventListener('click', () => {
+    openModal(`
+      <div class="modal-handle"></div>
+      <h3 style="margin-bottom:12px;">+ 添加律师信息</h3>
+      <div class="calc-form">
+        <label>姓名 *</label><input id="alName" placeholder="律师姓名">
+        <label>律师事务所 *</label><input id="alFirm" placeholder="律所全称">
+        <label>城市</label><input id="alCity" placeholder="如：广州">
+        <label>擅长领域（逗号分隔）</label><input id="alFields" placeholder="如：消费维权,合同纠纷">
+        <label>执业年限</label><input id="alExp" placeholder="如：10年">
+        <label>代表案例</label><input id="alCases" placeholder="简要描述代表案例">
+      </div>
+      <button class="btn btn-primary" id="saveLawyer" style="margin-top:8px;">保存</button>
+      <button class="btn btn-outline btn-sm" onclick="closeModal()" style="width:100%;margin-top:6px;">取消</button>
+    `);
+    $('#saveLawyer').addEventListener('click', () => {
+      const n = $('#alName').value.trim();
+      const f = $('#alFirm').value.trim();
+      if (!n || !f) { alert('请填写姓名和律所'); return; }
+      const newLawyer = {
+        id: Date.now(),
+        name: n,
+        firm: f,
+        city: $('#alCity').value.trim(),
+        province: $('#alCity').value.trim(),
+        fields: $('#alFields').value.split(/[,，/]/).map(s=>s.trim()).filter(Boolean),
+        experience: $('#alExp').value.trim(),
+        cases: $('#alCases').value.trim(),
+        verified: false,
+        photo: ''
+      };
+      lawyersData.push(newLawyer);
+      try {
+        const stored = JSON.parse(localStorage.getItem('user_lawyers') || '[]');
+        stored.push(newLawyer);
+        localStorage.setItem('user_lawyers', JSON.stringify(stored));
+      } catch(e) {}
+      closeModal();
+      renderLawyerList();
+      showToast('律师信息已添加');
+    });
+  });
+
+  $('#lawyerSearch')?.addEventListener('input', function() {
+    lawyerFilters.search = this.value;
+    lawyerPage = 1;
+    renderLawyerList();
+  });
+}
+
+// ==================== TEMPLATES ====================
+function renderTemplates() {
+  if (!templatesData.length) { $('#templateList').innerHTML = '<div class="empty-state"><div class="es-icon">📄</div><p>模板数据加载中...</p></div>'; return; }
+  renderTemplateCategories();
+  renderTemplateList();
+}
+
+function renderTemplateCategories() {
+  const catNames = { consumer:'消费', labor:'劳动', housing:'住房', family:'婚姻家庭', traffic:'交通', lending:'借贷', tort:'侵权' };
+  const cats = ['全部', ...new Set(templatesData.map(t => t.category))];
+  $('#templateCats').innerHTML = cats.map(c => `
+    <div class="filter-chip${templateCat === c ? ' active' : ''}" onclick="templateCat='${c}';renderTemplateCategories();renderTemplateList();">${catNames[c] || c}</div>
+  `).join('');
+}
+
+function renderTemplateList() {
+  let filtered = templatesData;
+  if (templateCat !== '全部') filtered = filtered.filter(t => t.category === templateCat);
+
+  const catNames = { consumer:'消费', labor:'劳动', housing:'住房', family:'婚姻家庭', traffic:'交通', lending:'借贷', tort:'侵权' };
+
+  $('#templateList').innerHTML = filtered.map(t => `
+    <div class="template-card" id="tcard_${t.id}">
+      <div class="template-header" onclick="toggleTemplate('${t.id}')">
+        <div class="th-icon">${t.icon || '📄'}</div>
+        <div class="th-info">
+          <div class="th-name">${t.name}</div>
+          <div class="th-desc">${t.description} · ${catNames[t.category]||t.category}</div>
+        </div>
+        <div class="th-arrow">▼</div>
+      </div>
+      <div class="template-body">
+        <div class="template-content">${t.content}</div>
+        <button class="btn-copy" onclick="copyTemplate('${t.id}');event.stopPropagation();">📋 一键复制全文</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleTemplate(id) {
+  const card = $(`#tcard_${id}`);
+  if (!card) return;
+  // Close others
+  $$('.template-card.expanded').forEach(c => c !== card && c.classList.remove('expanded'));
+  card.classList.toggle('expanded');
+}
+
+function copyTemplate(id) {
+  const t = templatesData.find(tp => tp.id === id);
+  if (!t) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t.content).then(() => showToast('已复制到剪贴板！')).catch(() => fallbackCopy(t.content));
+  } else {
+    fallbackCopy(t.content);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.left = '-9999px'; ta.style.top = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); showToast('已复制！请粘贴到Word中使用'); } catch(e) { alert('复制失败，请手动选择文本复制'); }
+  document.body.removeChild(ta);
+}
+
+// ==================== AI GUIDE ====================
+function initAI() {
+  $('#aiOutput').innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">👆 输入你的法律问题，AI帮你分析维权方案</div>';
+  $('#aiCopy').style.display = 'none';
+  $('#aiStop').style.display = 'none';
+}
+
+function bindAIButtons() {
+  $('#aiAnalyze')?.addEventListener('click', handleAIAnalyze);
+  $('#aiStop')?.addEventListener('click', stopAIGeneration);
+  $('#aiReset')?.addEventListener('click', () => {
+    $('#aiInput').value = '';
+    initAI();
+  });
+  $('#aiCopy')?.addEventListener('click', () => {
+    const text = $('#aiOutput').textContent;
+    if (text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('已复制分析结果！'));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+  });
+}
+
+function handleAIAnalyze() {
+  const input = $('#aiInput').value.trim();
+  if (input.length < 10) { showToast('请至少输入10个字描述你的问题'); return; }
+
+  $('#aiOutput').innerHTML = '<div class="ai-loading"><span class="dot-pulse">AI正在分析你的案件</span></div>';
+  $('#aiAnalyze').style.display = 'none';
+  $('#aiStop').style.display = 'block';
+  $('#aiCopy').style.display = 'none';
+
+  const systemPrompt = `你是一位资深的法律顾问。请用口语化中文回答用户的法律问题。按以下格式输出：
+
+## 案情梳理
+简要概括用户描述的情况。
+
+## 涉及的法律问题
+列出本案涉及的主要法律问题。
+
+## 维权步骤
+1. 第一步具体做法
+2. 第二步具体做法
+（至少列出3-5步，优先推荐成本最低的途径）
+
+## 需要准备的证据
+- 列出关键证据类型
+
+## 注意事项和常见陷阱
+- 列出重要提醒
+
+## 相关法律条文
+- 列举可能适用的法律条文（用白话解释）`;
+
+  // Try SiliconFlow API
+  performAIRequest(systemPrompt, input);
+}
+
+function performAIRequest(systemPrompt, userInput) {
+  const apiKey = localStorage.getItem('ai_api_key') || '';
+  const API_URL = 'https://api.siliconflow.cn/v1/chat/completions';
+
+  if (!apiKey) {
+    // No API key, use simulated local response
+    simulateAIResponse(userInput);
+    return;
+  }
+
+  aiAbortController = new AbortController();
+
+  const payload = {
+    model: 'deepseek-ai/DeepSeek-V3',
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userInput }
+    ],
+    temperature: 0.7,
+    max_tokens: 2000,
+    stream: true
+  };
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(payload),
+    signal: aiAbortController.signal
+  }).then(async response => {
+    if (!response.ok) throw new Error(`API ${response.status}`);
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullContent = '';
+    let outputStarted = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split('\n');
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') break;
+          try {
+            const json = JSON.parse(data);
+            const content = json.choices?.[0]?.delta?.content || '';
+            if (content) {
+              if (!outputStarted) {
+                $('#aiOutput').innerHTML = '';
+                outputStarted = true;
+              }
+              fullContent += content;
+              $('#aiOutput').innerHTML = markdownToHTML(fullContent);
+            }
+          } catch(e) {}
+        }
+      }
+    }
+    finalizeAIOutput(fullContent);
+  }).catch(err => {
+    if (err.name === 'AbortError') {
+      $('#aiOutput').innerHTML = '<div class="empty-state"><p>⏹ 已停止生成</p></div>';
+    } else {
+      // Fallback to simulated response
+      simulateAIResponse(userInput);
+    }
+    resetAIButtons();
+  });
+}
+
+function simulateAIResponse(input) {
+  $('#aiOutput').innerHTML = '<div class="ai-loading"><span class="dot-pulse">AI正在分析你的案件（离线模式）</span></div>';
+
+  // Generate a helpful simulated response based on keywords
+  let response = '';
+  if (input.includes('假货') || input.includes('假') || input.includes('假冒')) {
+    response = `## 案情梳理\n您遇到了消费纠纷中的假货问题，涉及购买到假冒伪劣商品后的维权。\n\n## 涉及的法律问题\n主要涉及消费者权益保护法中关于欺诈行为的"退一赔三"规定。\n\n## 维权步骤\n1. 立即固定证据，对商品拍照录像，保存订单截图和支付记录\n2. 联系商家要求"退一赔三"（不足500元按500元赔）\n3. 若商家拒绝，联系电商平台客服介入\n4. 拨打12315热线或在全国12315平台投诉\n5. 金额较大或协商无果，可向法院起诉\n\n## 需要准备的证据\n- 订单详情和支付记录截图\n- 商品实物照片/视频（细节对比真品）\n- 与商家的聊天记录\n- 鉴定报告（如有）\n\n## 注意事项和常见陷阱\n- 不要先退货再维权，证据可能因此丢失\n- 注意维权时效，电商平台一般有15天售后期\n- 保留所有沟通记录，最好用文字而非电话\n\n## 相关法律条文\n- 《消费者权益保护法》第55条：经营者欺诈，退一赔三，最低500元\n- 《电子商务法》第38条：平台明知商家侵权而不处理，承担连带责任`;
+  } else if (input.includes('工资') || input.includes('欠薪') || input.includes('辞退') || input.includes('裁员')) {
+    response = `## 案情梳理\n您遇到了劳动争议问题，涉及劳动关系中的权益保护。\n\n## 涉及的法律问题\n主要涉及劳动合同法关于工资支付、解除劳动合同补偿等规定。\n\n## 维权步骤\n1. 收集所有能证明劳动关系和争议事实的证据\n2. 与单位进行书面沟通（微信/邮件），留下记录\n3. 拨打12333向劳动监察大队投诉\n4. 向劳动仲裁委申请仲裁（免费，时效1年）\n5. 对仲裁不服可在15日内向法院起诉\n\n## 需要准备的证据\n- 劳动合同（如有）\n- 工资银行流水/微信转账记录\n- 考勤记录、工牌、工作证\n- 与HR/领导的聊天记录\n- 辞退通知书\n\n## 注意事项和常见陷阱\n- 不要主动写辞职信！否则失去补偿资格\n- 劳动仲裁时效只有1年，不要拖延\n- 与HR谈话时打开手机录音\n\n## 相关法律条文\n- 《劳动合同法》第85条：拖欠工资逾期不付加赔50%-100%\n- 《劳动合同法》第87条：违法辞退需支付2倍经济补偿\n- 《劳动争议调解仲裁法》第27条：仲裁时效1年`;
+  } else {
+    response = `## 案情梳理\n根据您的描述，这是一个需要法律分析的纠纷。建议从证据收集和协商入手。\n\n## 涉及的法律问题\n建议梳理涉及的民事/行政/刑事法律关系，确定适用的法律规范。\n\n## 维权步骤\n1. 梳理事实经过，整理时间线和关键节点\n2. 收集并保存所有相关证据材料\n3. 尝试与对方协商解决，保留沟通记录\n4. 协商不成可向相关行政部门投诉\n5. 最后可考虑通过诉讼或仲裁解决\n\n## 需要准备的证据\n- 合同、协议等书面文件\n- 付款凭证、转账记录\n- 聊天记录、邮件往来\n- 照片、视频等视听资料\n- 证人证言\n\n## 注意事项和常见陷阱\n- 注意诉讼时效，一般民事纠纷为3年\n- 不要轻信口头承诺，要求书面确认\n- 涉及重大利益建议咨询专业律师\n\n## 相关法律条文\n- 请在"法律条文百科"中搜索相关法律法规\n- 如有具体问题可拨打12348法律援助热线`;
+  }
+
+  // Simulate typing effect
+  let i = 0;
+  const output = $('#aiOutput');
+  output.innerHTML = '';
+  const timer = setInterval(() => {
+    if (i < response.length) {
+      output.innerHTML = markdownToHTML(response.substring(0, i + 5));
+      i += 5;
+    } else {
+      clearInterval(timer);
+      output.innerHTML = markdownToHTML(response);
+      finalizeAIOutput(response);
+    }
+  }, 20);
+}
+
+function stopAIGeneration() {
+  if (aiAbortController) {
+    aiAbortController.abort();
+    aiAbortController = null;
+  }
+  resetAIButtons();
+}
+
+function resetAIButtons() {
+  $('#aiAnalyze').style.display = 'block';
+  $('#aiStop').style.display = 'none';
+}
+
+function finalizeAIOutput(content) {
+  resetAIButtons();
+  if (!content || content.length < 10) {
+    $('#aiOutput').innerHTML = '<div class="empty-state"><p>未能获取有效回复，请重新描述您的问题</p></div>';
+    return;
+  }
+  $('#aiCopy').style.display = 'block';
+  $('#aiOutput').innerHTML = markdownToHTML(content);
+}
+
+function markdownToHTML(md) {
+  let html = md;
+  html = html.replace(/^### (.+)$/gm, '<div class="ai-step-title" style="font-size:var(--font-sm);">$1</div>');
+  html = html.replace(/^## (.+)$/gm, '<div class="ai-step-title">$1</div>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+  html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
+    if (!match.includes('<ul>')) return '<ol>' + match + '</ol>';
+    return match;
+  });
+  html = html.replace(/\n\n/g, '<br>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+// ==================== CALCULATOR ====================
+function initCalc() {
+  $('#calcResult').style.display = 'none';
+}
+
+function bindCalcButtons() {
+  $('#calcBtn')?.addEventListener('click', () => {
+    const amount = parseFloat($('#calcAmount').value);
+    if (!amount || amount <= 0) { showToast('请输入有效的金额'); return; }
+    const type = $('#calcType').value;
+    let fee = 0;
+    let label = '';
+
+    if (type === 'property') {
+      if (amount <= 10000) fee = 50;
+      else if (amount <= 100000) fee = amount * 0.025 - 200;
+      else if (amount <= 200000) fee = amount * 0.02 + 300;
+      else if (amount <= 500000) fee = amount * 0.015 + 1300;
+      else if (amount <= 1000000) fee = amount * 0.01 + 3800;
+      else if (amount <= 2000000) fee = amount * 0.009 + 4800;
+      else if (amount <= 5000000) fee = amount * 0.008 + 6800;
+      else if (amount <= 10000000) fee = amount * 0.007 + 11800;
+      else fee = amount * 0.006 + 21800;
+      label = '财产案件受理费';
+    } else if (type === 'divorce') {
+      fee = amount <= 200000 ? 300 : amount * 0.005;
+      label = '离婚案件受理费';
+    } else if (type === 'labor') {
+      fee = 10;
+      label = '劳动争议案件受理费';
+    } else {
+      fee = amount <= 100000 ? 100 : amount <= 1000000 ? amount * 0.005 : amount * 0.003;
+      label = '其他案件受理费';
+    }
+
+    fee = Math.round(fee * 100) / 100;
+    $('#calcResult').style.display = 'block';
+    $('#calcResult').innerHTML = `
+      <div style="font-size:var(--font-sm);color:var(--text-muted);">${label}（估算）</div>
+      <div class="result-amount">¥${fee.toLocaleString('zh-CN')}</div>
+      <div style="font-size:var(--font-xs);color:var(--text-muted);margin-top:4px;">注：此为粗略估算，实际以法院立案窗口核定为准</div>
+    `;
+  });
+}
+
+// ==================== FAQ ====================
+function renderFAQ() {
+  if (!knowledgeBase) { $('#faqList').innerHTML = '<div class="empty-state"><p>加载中...</p></div>'; return; }
+
+  const faqs = [];
+  Object.values(knowledgeBase.categories || {}).forEach(cat => {
+    (cat.scenarios || []).forEach(sc => {
+      const q = `[${cat.name}] ${sc.name}应该怎么办？`;
+      const a = sc.plan ? sc.plan.steps.map(s => `${s.order}. ${s.title}：${s.detail}`).join('\n\n') : '请使用问题诊断功能获取详细方案。';
+      faqs.push({ q, a, cat: cat.name });
+    });
+  });
+
+  if (!faqs.length) {
+    faqs.push(
+      { q: '遇到消费欺诈怎么办？', a: '保留证据→联系商家索赔（退一赔三）→平台投诉→12315举报→起诉。依据《消费者权益保护法》第55条。', cat: '消费' },
+      { q: '被拖欠工资怎么维权？', a: '收集证据→与单位协商→打12333投诉→申请劳动仲裁（免费）→法院起诉。仲裁时效为1年，不要拖延。', cat: '劳动' },
+      { q: '租房押金被扣怎么办？', a: '检查合同→拍照留证→书面催告→社区调解→法院起诉。正常使用磨损不能扣押金。', cat: '住房' },
+      { q: '离婚需要什么手续？', a: '协议离婚：身份证+户口本+结婚证+离婚协议→民政局登记（30天冷静期）。诉讼离婚：向法院起诉。', cat: '婚姻家庭' }
+    );
+  }
+
+  $('#faqList').innerHTML = faqs.map((f, i) => `
+    <div class="faq-item" id="faq${i}">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        <span>❓ ${f.q}</span><span id="faqArrow${i}">▼</span>
+      </div>
+      <div class="faq-a">${f.a.replace(/\n/g,'<br>')}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  const item = $(`#faq${i}`);
+  if (!item) return;
+  item.classList.toggle('open');
+  const arrow = $(`#faqArrow${i}`);
+  if (arrow) arrow.textContent = item.classList.contains('open') ? '▲' : '▼';
+}
+
+// ==================== PROVISIONS ====================
+function renderProvisions() {
+  if (!provisionsData.length) {
+    provisionsData = getDefaultProvisions();
+  }
+  renderProvBranchFilters();
+  renderProvList();
+}
+
+function renderProvBranchFilters() {
+  const branches = ['全部', ...new Set(provisionsData.map(p => {
+    const bm = { civil:'民事', labor:'劳动', consumer:'消费', admin:'行政', economic:'经济', social:'社会', criminal:'刑事', procedure:'程序', family:'婚姻家庭' };
+    return bm[p.branch] || p.branch;
+  }))];
+  $('#provBranchFilters').innerHTML = branches.map(b => `
+    <div class="filter-chip${provFilters.branch === b ? ' active' : ''}" onclick="setProvFilter('branch','${b}')">${b}</div>
+  `).join('');
+}
+
+function setProvFilter(type, value) {
+  provFilters[type] = value;
+  provPage = 1;
+  renderProvBranchFilters();
+  renderProvList();
+}
+
+function renderProvList() {
+  let filtered = provisionsData;
+  const s = provFilters.search.toLowerCase();
+  if (s) filtered = filtered.filter(p => (p.lawName||'').includes(s) || (p.original||'').includes(s) || (p.explanation||'').includes(s) || (p.keywords||[]).some(k => k.includes(s)));
+
+  if (provFilters.branch !== '全部') {
+    const bm = { '民事':'civil', '劳动':'labor', '消费':'consumer', '行政':'admin', '经济':'economic', '社会':'social', '刑事':'criminal', '程序':'procedure', '婚姻家庭':'family' };
+    const branchKey = bm[provFilters.branch] || provFilters.branch;
+    filtered = filtered.filter(p => p.branch === branchKey);
+  }
+
+  const pageSize = 8;
+  const totalPages = Math.ceil(filtered.length / pageSize);
+  const start = (provPage - 1) * pageSize;
+  const pageData = filtered.slice(start, start + pageSize);
+
+  if (!pageData.length) {
+    $('#provList').innerHTML = '<div class="empty-state"><div class="es-icon">📚</div><p>没有找到匹配的法律条文</p></div>';
+  } else {
+    const bm = { civil:'民事', labor:'劳动', consumer:'消费', admin:'行政', economic:'经济', social:'社会', criminal:'刑事', procedure:'程序', family:'婚姻家庭' };
+    $('#provList').innerHTML = pageData.map(p => `
+      <div class="provision-card">
+        <div class="pv-tags">
+          <span class="pv-tag">${bm[p.branch]||p.branch}</span>
+          ${p.subcategory ? `<span class="pv-tag">${p.subcategory}</span>` : ''}
+          ${p.country && p.country !== 'CN' ? `<span class="pv-tag">🌍${p.country}</span>` : ''}
+        </div>
+        <div class="pv-title">${p.lawName} ${p.article}</div>
+        <div class="pv-text" id="pvText${p.id}">${p.original}</div>
+        <div class="pv-expand" onclick="toggleProvText('${p.id}')">展开全文 ▼</div>
+        <div style="font-size:var(--font-xs);color:var(--primary);margin-top:4px;">💡 ${p.explanation}</div>
+      </div>
+    `).join('');
+  }
+
+  $('#provPagination').innerHTML = `
+    <button ${provPage <= 1 ? 'disabled' : ''} onclick="provPage--;renderProvList();window.scrollTo(0,0);">上一页</button>
+    <span style="font-size:var(--font-sm);">${provPage}/${totalPages || 1}</span>
+    <button ${provPage >= totalPages ? 'disabled' : ''} onclick="provPage++;renderProvList();window.scrollTo(0,0);">下一页</button>
+  `;
+}
+
+function toggleProvText(id) {
+  const el = $(`#pvText${id}`);
+  if (!el) return;
+  el.classList.toggle('expanded');
+  const btn = el.nextElementSibling;
+  if (btn) btn.textContent = el.classList.contains('expanded') ? '收起 ▲' : '展开全文 ▼';
+}
+
+function bindProvisionSearch() {
+  $('#provSearch')?.addEventListener('input', function() {
+    provFilters.search = this.value;
+    provPage = 1;
+    renderProvList();
+  });
+}
+
+// ==================== GLOSSARY ====================
+function renderGlossary() {
+  const terms = [
+    { term: '小额诉讼', def: '基层法院审理的简单民事案件，标的额较小，一审终审，不能上诉。特点是审理快、程序简单。' },
+    { term: '诉讼时效', def: '权利人向法院请求保护权利的法定期间。一般民事纠纷为3年，从知道权利被侵害时起算。超过时效将丧失胜诉权。' },
+    { term: '仲裁 vs 诉讼', def: '仲裁是一裁终局，效率高但不公开；诉讼可以上诉，程序公开透明。劳动争议必须先仲裁才能起诉。' },
+    { term: '强制执行', def: '对方不履行生效判决时，向法院申请强制其履行的程序。可查封、扣押、冻结、划拨对方财产。' },
+    { term: '财产保全', def: '起诉前或诉讼中申请法院查封对方财产，防止对方转移。需提供担保，保全错误要赔偿对方损失。' },
+    { term: '举证责任', def: '谁主张谁举证。你说对方欠钱，你就要拿出证据。但部分案件（如环境污染）举证责任倒置。' },
+    { term: '连带责任', def: '多个责任人中任何一人都有义务承担全部责任，赔偿后可向其他责任人追偿。常见于共同侵权和担保。' },
+    { term: '精神损害赔偿', def: '因侵权行为遭受严重精神痛苦时可要求赔偿。人身伤害、名誉损害、隐私侵害等均可主张。' },
+    { term: '支付令', def: '债权人向法院申请的督促程序，无需开庭，速度快成本低。但对方在15天内提出异议即失效。' },
+    { term: '代位求偿', def: '你的债务人（欠你钱的人）怠于行使他自己的债权，你可以代替他去向他的债务人要钱。' },
+    { term: 'LPR利率', def: '贷款市场报价利率，法院计算逾期利息和违约金的基准。目前1年期LPR约为3.1%-3.45%。' },
+    { term: '格式条款', def: '商家预先拟定、不可协商的合同条款（如"最终解释权归本店"）。不合理加重对方责任的条款无效。' }
+  ];
+
+  $('#glossaryGrid').innerHTML = terms.map(t => `
+    <div class="glossary-item">
+      <h4>📖 ${t.term}</h4>
+      <p>${t.def}</p>
+    </div>
+  `).join('');
+}
+
+// ==================== SERVICE WORKER REGISTRATION ====================
+if ('serviceWorker' in navigator) {
+  // Minimal cache for offline
+  window.addEventListener('load', () => {
+    // The app works offline with embedded default data
+  });
+}
+
+// ==================== START ====================
+(function bootstrap() {
+  var d3 = document.getElementById('diag-status');
+  function start() {
+    if (d3) { d3.textContent = '⏳ 启动 init()...'; d3.style.background = '#f39c12'; }
+    try {
+      init().catch(function(e) {
+        console.error('Init error:', e);
+        if (d3) { d3.textContent = '❌ 启动错误: ' + e.message; d3.style.background = '#c0392b'; }
+      });
+    } catch(e) {
+      console.error('Start error:', e);
+      if (d3) { d3.textContent = '❌ 启动异常: ' + e.message; d3.style.background = '#c0392b'; }
+    }
+  }
+  if (document.readyState === 'loading') {
+    if (d3) { d3.textContent = '⏳ 等待DOM加载...'; d3.style.background = '#f39c12'; }
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    if (d3) { d3.textContent = '⏳ DOM已就绪(' + document.readyState + ') 立即启动'; d3.style.background = '#f39c12'; }
+    start();
+  }
+})();
+</script>
+</body>
+</html>
